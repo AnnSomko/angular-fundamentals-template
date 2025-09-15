@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { mockedAuthorsList } from '@app/shared/mocks/mocks';
 
 interface Course {
   id: string;
@@ -16,11 +15,5 @@ interface Course {
   styleUrls: ['./course-info.component.scss']
 })
 export class CourseInfoComponent {
-  @Input() course!: Course;
-
-  getAuthorNames(): string[] {
-    return this.course.authors.map(
-      id => mockedAuthorsList.find(a => a.id === id)?.name || 'Unknown'
-    );
-  }
+   @Input() course!: Course;
 }
