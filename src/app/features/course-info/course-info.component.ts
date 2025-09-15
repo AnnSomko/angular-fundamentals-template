@@ -1,4 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { mockedAuthorsList } from '@app/shared/mocks/mocks';
+
+interface Course {
+  id: string;
+  title: string;
+  description: string;
+  creationDate: string | Date;
+  duration: number;
+  authors: string[];
+}
 
 @Component({
   selector: 'app-course-info',
@@ -6,5 +16,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./course-info.component.scss']
 })
 export class CourseInfoComponent {
-  // Use the names for the input `course`.
+  @Input() course!: Course;
+
+  getAuthorNames(): string[] {
+    return this.course.authors.map(
+      id => mockedAuthorsList.find(a => a.id === id)?.name || 'Unknown'
+    );
+  }
 }
