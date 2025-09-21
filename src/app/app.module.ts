@@ -9,11 +9,13 @@ import { AuthorizedGuard } from '@app/auth/guards/authorized.guard';
 import { CoursesStoreService } from '@app/services/courses-store.service';
 import { CoursesService } from '@app/services/courses.service';
 import { CourseListModule } from './features/courses/course-list/course-list.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, CourseInfoComponent],
   imports: [
     BrowserModule,
+    FormsModule,
     SharedModule,
     FontAwesomeModule,
     CourseListModule,

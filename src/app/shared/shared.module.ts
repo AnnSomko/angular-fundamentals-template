@@ -41,6 +41,6 @@ const components = [
     FormsModule,
     ReactiveFormsModule,
   ],
-  exports: [components]
+  exports: [components, EmailValidatorDirective]
 })
 export class SharedModule { }
