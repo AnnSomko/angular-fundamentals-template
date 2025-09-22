@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import {
   FormArray,
   FormBuilder, FormControl, FormGroup,
@@ -21,11 +21,13 @@ export class CourseFormComponent {
   }
   courseForm!: FormGroup;
 
+  @ViewChild('courseFormRef') courseFormRef!: ElementRef<HTMLFormElement>;
+
   ngOnInit() {
     this.courseForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2)]],
       description: ['', [Validators.required, Validators.minLength(2)]],
-      duration: [0, [Validators.required, Validators.min(0)]],
+      duration: [null, [Validators.required, Validators.min(0)]],
       authors: this.fb.array<FormControl<string>>([]),
       courseAuthors: this.fb.array<FormControl<string>>([]),
       newAuthor: this.fb.group({
@@ -44,11 +46,6 @@ export class CourseFormComponent {
 
   get newAuthorName() {
     return this.courseForm.get('newAuthor.name');
-  }
-
-  get duration() {
-    const val = this.courseForm.get('duration')?.value || 0;
-    return val + ' minutes';
   }
 
   createAuthor(): void {
@@ -74,12 +71,17 @@ export class CourseFormComponent {
     }
   }
 
-  removeAuthor(index: number): void {
-    const courseAuthorControl = this.courseAuthors.at(index);
-    if (courseAuthorControl) {
-      this.authors.push(this.fb.control(courseAuthorControl.value));
-      this.courseAuthors.removeAt(index);
+  removeAuthorFromList(index: number): void {
+    this.authors.removeAt(index);
+  }
+
+  removeAuthorFromCourse(index: number): void {
+    const removedAuthor = this.courseAuthors.at(index)?.value;
+
+    if (removedAuthor) {
+      this.authors.push(this.fb.control(removedAuthor));
     }
+    this.courseAuthors.removeAt(index);
   }
 
   isInvalid(controlName: string) {
@@ -96,5 +98,10 @@ export class CourseFormComponent {
       console.log('Form invalid');
       this.courseForm.markAllAsTouched();
     }
-  } 
+  }
+
+  onCancel() {
+    this.courseForm.reset();
+    this.submitted = false;
+  }
 }

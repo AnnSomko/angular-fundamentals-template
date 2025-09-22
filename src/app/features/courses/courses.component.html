@@ -1,0 +1,12 @@
+<app-search 
+  [placeholder]="'Search courses...'" 
+  (search)="onSearch($event)"
+></app-search>
+
+<app-course-list
+  [courses]="filteredCourses"
+  [editable]="true"
+  (showCourse)="onShow($event)"
+  (editCourse)="onEdit($event)"
+  (deleteCourse)="onDelete($event)"
+></app-course-list>

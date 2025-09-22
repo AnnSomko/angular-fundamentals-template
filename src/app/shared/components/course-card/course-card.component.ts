@@ -20,10 +20,4 @@ export class CourseCardComponent {
   showCourse() {
     this.clickOnShow.emit();
   }
-
-  get formattedDuration(): string {
-    const hours = Math.floor(this.duration / 60);
-    const minutes = this.duration % 60;
-    return `${hours}:${minutes < 10 ? '0' + minutes : minutes} hours`;
-  }
 }
