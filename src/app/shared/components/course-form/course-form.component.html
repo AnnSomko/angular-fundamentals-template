@@ -1,56 +1,69 @@
-<!-- Replace ::text:: with your code -->
 <h2>Create / Edit Course</h2>
-<form>
+<form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
   <div class="app-plate">
     <div class="course">
       <h3>Main Info</h3>
       <div class="form__control">
         <label for="title">Title</label>
-        <!--Use the name `title` for the form control.-->
-        <input type="text" id="title" placeholder="Input text"/>
-        <span id="titleErrorMessage" class="text-danger">Title is required.</span>
+        <input type="text" id="title" placeholder="Input text" formControlName="title" />
+        <span id="titleErrorMessage" class="text-danger" *ngIf="isInvalid('title')">Title is required.</span>
       </div>
+
       <div class="form__control">
         <label for="description">Description</label>
-        <!--Use the name `description` for the form control.-->
-        <textarea
-          id="description"
-          name="description"
-          placeholder="Input text"
-          rows="4"
-          cols="5"
-        ></textarea>
-        <span id="descriptionErrorMessage" class="text-danger">Description is required.</span>
+        <textarea id="description" name="description" placeholder="Input text" rows="4" cols="5"
+          formControlName="description"></textarea>
+        <span id="descriptionErrorMessage" class="text-danger" *ngIf="isInvalid('description')">Description is
+          required.</span>
       </div>
-      <div class="separator"></div>
-      <h3>Authors</h3>
-      <div class="form__control">
-        <div class="course__flex">
-          <!--Use the name `author` for the form control.-->
-          <input type="text" id="author" placeholder="Input Author Name"/>
-          <app-button id="createAuthor"></app-button>
-        </div>
-        <span id="authorErrorMessage">New author should contain only latin letters and numbers.</span>
-        <div class="course__authors">
-          <!--Use the name `authors` for the form array.-->
-          ::Authors::
-        </div>
-      </div>
-      <div class="separator"></div>
+
       <h3>Duration</h3>
       <div class="form__control">
         <div class="course__flex">
-          <!--Use the name `duration` for the form array.-->
-          <input type="number" id="duration" placeholder="Input duration"/>
+          <input type="number" id="duration" placeholder="Input text" formControlName="duration" />
           <div class="course__duration">
-            ::Duration::
+            {{ duration }}
           </div>
         </div>
-        <span id="durationErrorMessage" class="text-danger">Duration is required.</span>
+        <span id="durationErrorMessage" class="text-danger" *ngIf="isInvalid('duration')">Duration is required.</span>
       </div>
-      <div class="form__action">
-        <app-button></app-button>
+
+      <h3>Authors</h3>
+      <div class="form__control">
+        <div class="course__flex" formGroupName="newAuthor">
+          <input type="text" id="author" placeholder="Input text" formControlName="name" />
+          <app-button id="createAuthor" buttonText="Create Author" (click)="createAuthor()"></app-button>
+        </div>
+        <span class="text-danger" *ngIf="isInvalid('newAuthor.name')">
+          New author should contain only latin letters and numbers and be at least 2 characters.
+        </span>
+
+        <div class="course__authors" formArrayName="authors">
+          <!-- Authors list -->
+          <h4>Authors List</h4>
+          <div *ngFor="let author of authors.controls; let i = index">
+            <input [formControlName]="i" [attr.disabled]="true" />
+            <app-button (click)="addAuthor(i)" [iconSrc]="'assets/add.png'"></app-button>
+          </div>
+        </div>
+
+        <div formArrayName="courseAuthors">
+          <h4>Course Authors</h4>
+          <p *ngIf="courseAuthors.length === 0">Author list is empty</p>
+          <div *ngFor="let ca of courseAuthors.controls; let j = index">
+            <input [formControlName]="j" [attr.disabled]="true" />
+            <app-button
+              (click)="removeAuthor(j)"
+              [iconSrc]="'assets/delete.png'"
+            ></app-button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </form>
+
+<div class="form__btn">
+  <app-button buttonText="Create Course" type="submit"></app-button>
+  <app-button buttonText="Cancel" type="submit"></app-button>
+</div>

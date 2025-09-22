@@ -35,3 +35,11 @@
     cursor: pointer;
   }
 }
+
+.form__btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  gap: 15px;
+  margin-top: 10px;
+}
