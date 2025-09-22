@@ -20,7 +20,7 @@
       <h3>Duration</h3>
       <div class="form__control">
         <div class="course__flex">
-          <input type="number" id="duration" placeholder="Input text" formControlName="duration" />
+          <input class="course__flex-input" type="number" id="duration" placeholder="Input text" formControlName="duration" />
           <div class="course__duration">
             {{ duration }}
           </div>
@@ -31,31 +31,38 @@
       <h3>Authors</h3>
       <div class="form__control">
         <div class="course__flex" formGroupName="newAuthor">
-          <input type="text" id="author" placeholder="Input text" formControlName="name" />
+          <input class="course__flex-input" type="text" id="author" placeholder="Input text" formControlName="name" />
           <app-button id="createAuthor" buttonText="Create Author" (click)="createAuthor()"></app-button>
         </div>
         <span class="text-danger" *ngIf="isInvalid('newAuthor.name')">
           New author should contain only latin letters and numbers and be at least 2 characters.
         </span>
 
-        <div class="course__authors" formArrayName="authors">
-          <!-- Authors list -->
-          <h4>Authors List</h4>
-          <div *ngFor="let author of authors.controls; let i = index">
-            <input [formControlName]="i" [attr.disabled]="true" />
-            <app-button (click)="addAuthor(i)" [iconSrc]="'assets/add.png'"></app-button>
+        <div class="course__container">
+          <div class="course__authors" formArrayName="authors">
+            <!-- Authors list -->
+            <h4>Authors List</h4>
+            <div *ngFor="let author of authors.controls; let i = index">
+              <input [formControlName]="i" [attr.disabled]="true" />
+              <button type="button" class="icon-btn" (click)="addAuthor(i)">
+                <img src="assets/add.png" alt="Add author" />
+              </button>
+              <button type="button" class="icon-btn" (click)="removeAuthor(i)">
+                <img src="assets/remove.png" alt="Remove author" />
+              </button>
+            </div>
           </div>
-        </div>
 
-        <div formArrayName="courseAuthors">
-          <h4>Course Authors</h4>
-          <p *ngIf="courseAuthors.length === 0">Author list is empty</p>
-          <div *ngFor="let ca of courseAuthors.controls; let j = index">
-            <input [formControlName]="j" [attr.disabled]="true" />
-            <app-button
-              (click)="removeAuthor(j)"
-              [iconSrc]="'assets/delete.png'"
-            ></app-button>
+          <div formArrayName="courseAuthors">
+            <h4>Course Authors</h4>
+            <p *ngIf="courseAuthors.length === 0">Author list is empty</p>
+            <div *ngFor="let ca of courseAuthors.controls; let j = index">
+              <input [formControlName]="j" [attr.disabled]="true" />
+
+              <button type="button" class="icon-btn" (click)="removeAuthor(j)">
+                <img src="assets/delete.png" alt="Remove author" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
