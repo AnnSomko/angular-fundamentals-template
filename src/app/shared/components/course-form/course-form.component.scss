@@ -1,15 +1,22 @@
 @import 'src/app/shared/styles/styles';
 
 .course {
- min-width: 60vw;
+  min-width: 60vw;
 
   &__flex {
     display: flex;
-    justify-content: space-between;
     align-items: baseline;
 
     & input {
       flex: 1;
+    }
+
+    &-input {
+      max-width: 50%;
+
+      &:focus {
+        outline: none;
+      }
     }
 
     & app-button {
@@ -34,4 +41,18 @@
     margin-left: 4px;
     cursor: pointer;
   }
+
+  &__container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.form__btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  gap: 15px;
+  margin-top: 10px;
 }

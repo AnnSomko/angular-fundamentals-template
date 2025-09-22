@@ -1,4 +1,4 @@
 <div class="app-button">
-  <!-- Replace the text below with your code -->
-  Button
+  <img *ngIf="iconSrc" [src]="iconSrc" alt="" class="button-icon">
+  <span *ngIf="buttonText">{{ buttonText }}</span>
 </div>
