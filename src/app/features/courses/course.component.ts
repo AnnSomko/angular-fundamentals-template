@@ -12,11 +12,11 @@ interface Course {
 }
 
 @Component({
-  selector: 'app-courses',
-  templateUrl: './courses.component.html',
-  styleUrls: ['./courses.component.css']
+  selector: 'app-course',
+  templateUrl: './course.component.html',
+  styleUrls: ['./course.component.css']
 })
-export class CoursesComponent implements OnInit {
+export class CourseComponent implements OnInit {
   courses: Course[] = [];
   filteredCourses: Course[] = [];
   editable = true;

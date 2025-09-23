@@ -9,9 +9,9 @@ import { NgForm } from '@angular/forms';
 export class LoginFormComponent {
   @ViewChild("loginForm") public loginForm!: NgForm;
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      console.log('Form submitted:', this.loginForm.value);
+  onSubmit(form: NgForm) {
+    if (form.valid) {
+      console.log('Form submitted:', form.value);
     } else {
       console.log('Form is invalid');
     }

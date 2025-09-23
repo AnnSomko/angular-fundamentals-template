@@ -1,21 +1,24 @@
 <h2 class="text-align-center">Login</h2>
 <div class="app-plate">
-  <form #loginForm="ngForm">
+  <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
     <div class="login-form">
       <div>
         <div class="form__control">
           <label for="email">Email</label>
-          <input type="text" id="email" placeholder="Input text" name="email" ngModel required appEmailValidator
+          <input type="text" id="email" placeholder="Input text" name="email" ngModel required emailValidator
             #email="ngModel" />
-          <span *ngIf="email.invalid && (email.touched || loginForm.submitted)" class="text-danger">
+           <span *ngIf="email.errors?.['required'] && (email.touched || loginForm.submitted)" class="text-danger">
             Email is required.
+          </span>
+          <span *ngIf="email.errors?.['invalidEmail'] && (email.touched || loginForm.submitted)" class="text-danger">
+            Email is invalid.
           </span>
         </div>
         <div class="form__control">
           <label for="password">Password</label>
           <input type="password" id="password" placeholder="Input text" name="password" ngModel required
             #password="ngModel" />
-          <span *ngIf="(password.invalid && (password.touched || loginForm.submitted))" class="text-danger">
+          <span *ngIf="password.errors?.['required'] && (password.touched || loginForm.submitted)" class="text-danger">
             Password is required.
           </span>
         </div>

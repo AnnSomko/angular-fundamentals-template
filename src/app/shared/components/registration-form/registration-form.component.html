@@ -16,7 +16,7 @@
         </div>
         <div class="form__control">
           <label for="email">Email</label>
-          <input type="email" id="email" formControlName="email" placeholder="Input text" appEmailValidator/>
+          <input type="email" id="email" formControlName="email" placeholder="Input text" emailValidator />
           <span id="emailErrorMessage" class="text-danger" *ngIf="registrationForm.get('email')?.invalid && (registrationForm.get('email')?.touched || submitted)">
             Email is required.
           </span>
