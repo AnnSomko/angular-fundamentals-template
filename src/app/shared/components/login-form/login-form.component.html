@@ -16,13 +16,14 @@
         </div>
         <div class="form__control">
           <label for="password">Password</label>
-          <input type="password" id="password" minlength="6" placeholder="Input text" name="password" ngModel required
+          <input type="password" id="password" placeholder="Input text" name="password" ngModel required
             #password="ngModel" />
-          <span *ngIf="password.errors?.['required'] && (password.touched || loginForm.submitted)" class="text-danger">
+          <span
+            id="password"
+            class="text-danger"
+            *ngIf="(loginForm.submitted || password.touched) && password.errors?.['required']"
+          >
             Password is required.
-          </span>
-          <span *ngIf="password.errors?.['minlength'] && (password.touched || loginForm.submitted)" class="text-danger">
-            Password must be at least 6 characters.
           </span>
         </div>
       </div>
