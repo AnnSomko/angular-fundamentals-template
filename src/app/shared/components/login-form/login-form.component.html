@@ -16,10 +16,10 @@
         </div>
         <div class="form__control">
           <label for="password">Password</label>
-          <input type="password" id="password" placeholder="Input text" name="password" ngModel required
+          <input type="password" id="passwordInput" placeholder="Input text" name="password" ngModel required
             #password="ngModel" />
           <span
-            id="password"
+            id="passwordErrorMessage"
             class="text-danger"
             *ngIf="(loginForm.submitted || password.touched) && password.errors?.['required']"
           >
