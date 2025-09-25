@@ -14,10 +14,9 @@ import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@an
 
 export class EmailValidatorDirective implements Validator {
   validate(control: AbstractControl): ValidationErrors | null {
-    if (!control.value) {
-      return null;
-    }
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!control.value) return null;
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const valid = emailRegex.test(control.value);
 
     return valid ? null : { invalidEmail: true };
