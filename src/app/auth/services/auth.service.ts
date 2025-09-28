@@ -1,30 +1,70 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { SessionStorageService } from './session-storage.service';
+
+interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+}
+
+interface AuthResponse {
+  token: string;
+}
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class AuthService {
-    login(user: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  private isAuthorized$$ = new BehaviorSubject<boolean>(false);
+  public isAuthorized$ = this.isAuthorized$$.asObservable();
 
-    logout() {
-        // Add your code here
-    }
+  constructor(
+    private http: HttpClient,
+    private sessionStorage: SessionStorageService
+  ) {
+    const token = this.sessionStorage.getToken();
+    this.isAuthorized$$.next(!!token);
+  }
 
-    register(user: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  login(user: LoginRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>('/api/login', user).pipe(
+      tap((response) => {
+        this.sessionStorage.setToken(response.token);
+        this.isAuthorized = true;
+      })
+    );
+  }
 
-    get isAuthorised() {
-        // Add your code here. Get isAuthorized$$ value
-    }
+  logout(): void {
+    this.sessionStorage.deleteToken();
+    this.isAuthorized = false;
+  }
 
-    set isAuthorised(value: boolean) {
-        // Add your code here. Change isAuthorized$$ value
-    }
+  register(user: RegisterRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>('/api/register', user).pipe(
+      tap((response) => {
+        this.sessionStorage.setToken(response.token);
+        this.isAuthorized = true;
+      })
+    );
+  }
 
-    getLoginUrl() {
-        // Add your code here
-    }
+  get isAuthorized(): boolean {
+    return this.isAuthorized$$.value;
+  }
+
+  set isAuthorized(value: boolean) {
+    this.isAuthorized$$.next(value);
+  }
+
+  getLoginUrl(): string {
+    return '/login';
+  }
 }
