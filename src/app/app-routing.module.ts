@@ -6,29 +6,29 @@ import { AdminGuard } from './user/guards/admin.guard';
 
 const routes: Routes = [
   {
-    path: 'courses',
-    canLoad: [AuthorizedGuard],
-    canActivate: [AuthorizedGuard],
-    loadChildren: () =>
-      import('./courses/courses.module').then(m => m.CoursesModule),
-  },
+  path: 'courses',
+  canLoad: [AuthorizedGuard],
+  canActivate: [AuthorizedGuard],
+  loadChildren: () =>
+    import('./features/courses/courses.module').then(m => m.CourseModule),
+},
   {
     path: 'courses/add',
     canActivate: [AuthorizedGuard, AdminGuard],
     loadChildren: () =>
-      import('../app/courses/add-course/add-course.module').then(m => m.AddCourseModule),
+      import('./features/courses/add-course/add-course.module').then(m => m.AddCourseModule),
   },
   {
     path: 'courses/:id',
     canActivate: [AuthorizedGuard],
     loadChildren: () =>
-      import('../app/courses/show-course/show-course.module').then(m => m.ShowCourseModule),
+      import('./features/courses/show-course/show-course.module').then(m => m.ShowCourseModule),
   },
   {
     path: 'courses/edit/:id',
     canActivate: [AuthorizedGuard, AdminGuard],
     loadChildren: () =>
-      import('../app/courses/edit-course/edit-course.module').then(m => m.EditCourseModule),
+      import('./features/courses/edit-course/edit-course.module').then(m => m.EditCourseModule),
   },
   {
     path: 'login',

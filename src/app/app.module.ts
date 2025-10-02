@@ -10,7 +10,7 @@ import { CoursesStoreService } from '@app/services/courses-store.service';
 import { CoursesService } from '@app/services/courses.service';
 import { CourseListModule } from './features/courses/course-list/course-list.module';
 import { FormsModule } from '@angular/forms';
-import { CourseComponent } from './features/courses/course.component';
+import { CourseComponent } from './features/courses/courses.component';
 
 @NgModule({
   declarations: [AppComponent, CourseInfoComponent, CourseComponent],

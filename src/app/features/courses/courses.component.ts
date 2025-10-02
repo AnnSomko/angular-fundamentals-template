@@ -12,19 +12,18 @@ interface Course {
 }
 
 @Component({
-  selector: 'app-course',
-  templateUrl: './course.component.html',
-  styleUrls: ['./course.component.css']
+  selector: 'app-courses',
+  templateUrl: './courses.component.html',
+  styleUrls: ['./courses.component.css']
 })
-export class CourseComponent implements OnInit {
+export class CoursesComponent implements OnInit {
   courses: Course[] = [];
   filteredCourses: Course[] = [];
   editable = true;
 
   ngOnInit() {
-    this.courses = [...mockedCoursesList];
-
-    this.filteredCourses = [...this.courses];
+    const id = this.route.snapshot.paramMap.get('id');
+    this.course = this.coursesService.getCourseById(id);
   }
 
   onSearch(query: string) {
