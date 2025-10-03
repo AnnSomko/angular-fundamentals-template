@@ -1,19 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
-interface Course {
-    id?: string;
-    title: string;
-    description: string;
-    duration: number;
-    authors: string[];
-}
-
-interface Author {
-    id?: string;
-    name: string;
-}
+import { Course } from '@app/models/course.model';
+import { Author } from '@app/models/author.model';
 
 @Injectable({
     providedIn: 'root'

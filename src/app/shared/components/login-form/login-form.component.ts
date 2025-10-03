@@ -1,5 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '@app/auth/services/auth.service';
 
 @Component({
   selector: 'app-login-form',
@@ -8,12 +10,24 @@ import { NgForm } from '@angular/forms';
 })
 export class LoginFormComponent {
   @ViewChild("loginForm") public loginForm!: NgForm;
+  errorMessage = '';
+
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) { }
 
   onSubmit(form: NgForm) {
     if (form.valid) {
-      console.log('Form submitted:', form.value);
+      const { email, password } = form.value;
+
+      this.authService.login({ email, password }).subscribe({
+        next: () => this.router.navigate(['/courses']),
+        error: () => this.errorMessage = 'Invalid email or password'
+      });
+
     } else {
-      console.log('Form is invalid');
+      this.errorMessage = 'Form is invalid';
     }
   }
 }

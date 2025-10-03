@@ -1,17 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { RegistrationRoutingModule } from './registration-routing.module';
-import { RegistrationPageComponent } from './registration-page';
 import { SharedModule } from '@app/shared/shared.module';
+import { Routes, RouterModule } from '@angular/router';
+import { RegistrationPageComponent } from './registration-page.component';
 
+const routes: Routes = [
+  { path: '', component: RegistrationPageComponent }
+];
 
 @NgModule({
   declarations: [RegistrationPageComponent],
   imports: [
     CommonModule,
     SharedModule,
-    RegistrationRoutingModule
+    RouterModule.forChild(routes)
   ]
 })
 export class RegistrationModule { }

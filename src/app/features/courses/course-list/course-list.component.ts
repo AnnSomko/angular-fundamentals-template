@@ -1,14 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Course } from '@app/models/course.model';
 import { mockedAuthorsList } from '@app/shared/mocks/mocks';
-
-interface Course {
-  id: string;
-  title: string;
-  description: string;
-  creationDate: string | Date;
-  duration: number;
-  authors: string[];
-}
 
 @Component({
   selector: 'app-course-list',
@@ -23,16 +15,16 @@ export class CourseListComponent {
   @Output() editCourse = new EventEmitter<string>();
   @Output() deleteCourse = new EventEmitter<string>();
 
-  onShow(courseTitle: string) {
-    this.showCourse.emit(courseTitle);
+  onShow(courseId: string) {
+    this.showCourse.emit(courseId);
   }
 
-  onEdit(courseTitle: string) {
-    this.editCourse.emit(courseTitle);
+  onEdit(courseId: string) {
+    this.editCourse.emit(courseId);
   }
 
-  onDelete(courseTitle: string) {
-    this.deleteCourse.emit(courseTitle);
+  onDelete(courseId: string) {
+    this.deleteCourse.emit(courseId);
   }
 
   getAuthorNames(authorIds: string[]): string[] {

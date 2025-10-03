@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 interface Course {
   id: string;
@@ -16,4 +16,10 @@ interface Course {
 })
 export class CourseInfoComponent {
    @Input() course!: Course;
+
+   @Output() back = new EventEmitter<void>();
+
+    onBack() {
+      this.back.emit();
+    }
 }

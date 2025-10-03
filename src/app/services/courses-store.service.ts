@@ -1,19 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { CoursesService } from './courses.service';
-
-interface Course {
-    id?: string;
-    title: string;
-    description: string;
-    duration: number;
-    authors: string[];
-}
-
-interface Author {
-    id?: string;
-    name: string;
-}
+import { Course } from '@app/models/course.model';
+import { Author } from '@app/models/author.model';
 
 @Injectable({
     providedIn: 'root'

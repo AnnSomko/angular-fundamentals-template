@@ -1,21 +1,24 @@
 <app-search 
   [placeholder]="'Search courses...'" 
-  (search)="onSearch($event)"
-></app-search>
+  (search)="onSearch($event)">
+</app-search>
+
 <app-course-info
-  *ngIf="(courses$ | async)?.length === 0"
+  *ngIf="(filteredCourses.length === 0)"
   title="Your List Is Empty" 
 >
 <app-button 
-    *ngIf="isAdmin$ | async" 
-    buttonText="Add new course" 
-    (click)="onAddCourse()">
-  </app-button>
+  *ngIf="isAdmin$ | async" 
+  buttonText="Add new course" 
+  (click)="onAddCourse();">
+</app-button>
+
 </app-course-info>
+
 <app-course-list
   [courses]="filteredCourses"
   [editable]="true"
   (showCourse)="onShow($event)"
   (editCourse)="onEdit($event)"
-  (deleteCourse)="onDelete($event)"
-></app-course-list>
+  (deleteCourse)="onDelete($event)">
+</app-course-list>

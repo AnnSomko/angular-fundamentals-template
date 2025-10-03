@@ -1,15 +1,9 @@
-
 import { Component, OnInit } from '@angular/core';
-import { mockedCoursesList } from '@app/shared/mocks/mocks';
-
-interface Course {
-  id: string;
-  title: string;
-  description: string;
-  creationDate: string | Date;
-  duration: number;
-  authors: string[];
-}
+import { ActivatedRoute, Router } from '@angular/router';
+import { Course } from '@app/models/course.model';
+import { CoursesStoreService } from '@app/services/courses-store.service';
+import { UserStoreService } from '@app/user/services/user-store.service';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'app-courses',
@@ -17,17 +11,27 @@ interface Course {
   styleUrls: ['./courses.component.css']
 })
 export class CoursesComponent implements OnInit {
-  courses: Course[] = [];
+  courses$: Observable<Course[]>;
   filteredCourses: Course[] = [];
-  editable = true;
+  isAdmin$: Observable<boolean>;
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private coursesStore: CoursesStoreService,
+    private userStore: UserStoreService
+  ) {
+    this.courses$ = this.coursesStore.courses$;
+    this.isAdmin$ = this.userStore.isAdmin$;
+  }
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.course = this.coursesService.getCourseById(id);
+    this.coursesStore.getAll();
+    this.courses$.subscribe(courses => this.filteredCourses = [...courses]);
   }
 
   onSearch(query: string) {
-    this.filteredCourses = this.courses.filter(course =>
+    this.filteredCourses = this.filteredCourses.filter(course =>
       course.title.toLowerCase().includes(query.toLowerCase())
     );
   }
@@ -36,15 +40,19 @@ export class CoursesComponent implements OnInit {
     return authors.join(', ');
   }
 
-  onShow(title: string) {
-    console.log('Show course:', title);
+  onShow(courseId: string) {
+    this.router.navigate([`/courses/${courseId}`]);
   }
 
-  onEdit(title: string) {
-    console.log('Edit course:', title);
+  onEdit(courseId: string) {
+    this.router.navigate([`/courses/edit/${courseId}`]);
   }
 
-  onDelete(title: string) {
-    console.log('Delete course:', title);
+  onDelete(courseId: string) {
+    this.coursesStore.deleteCourse(courseId);
+  }
+
+  onAddCourse() {
+    this.router.navigate(['/courses/add']);
   }
 }

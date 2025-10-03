@@ -1,26 +1,22 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, UrlTree } from '@angular/router';
-import { Observable, map } from 'rxjs';
-import { UserStoreService } from '../services/user-store.service';
+import { UserStoreService } from '@app/user/services/user-store.service';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class AdminGuard implements CanActivate {
-    constructor(
+  constructor(
     private userStore: UserStoreService,
     private router: Router
   ) {}
 
   canActivate(): Observable<boolean | UrlTree> {
-    return this.userStore.isAdmin$.pipe(
-      map(isAdmin => {
-        if (isAdmin) {
-          return true;
-        } else {
-          return this.router.createUrlTree(['/courses']);
-        }
-      })
-    );
+    if (this.userStore.isAdmin) {
+      return of(true);
+    } else {
+      return of(this.router.parseUrl('/courses'));
+    }
   }
 }

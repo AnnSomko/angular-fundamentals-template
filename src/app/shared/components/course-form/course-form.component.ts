@@ -12,8 +12,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
   templateUrl: './course-form.component.html',
   styleUrls: ['./course-form.component.scss'],
 })
-
-export class CourseComponent {
+export class CourseFormComponent {
   submitted = false;
 
   constructor(public fb: FormBuilder, public library: FaIconLibrary) {
