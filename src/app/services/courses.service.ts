@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { Course } from '@app/models/course.model';
+import { Course, CoursesResponse } from '@app/models/course.model';
 import { Author } from '@app/models/author.model';
 
 @Injectable({
@@ -12,20 +12,20 @@ export class CoursesService {
     private readonly BASE_URL = 'http://localhost:4000';
     constructor(private http: HttpClient) { }
 
-    getAll(): Observable<{successful: boolean, result: Course[]}> {
-        return this.http.get<{successful: boolean, result: Course[]}>(`${this.BASE_URL}/courses/all`)
+    getAll(): Observable<CoursesResponse> {
+        return this.http.get<CoursesResponse>(`${this.BASE_URL}/courses/all`);
     }
 
-    createCourse(course: Course): Observable<{successful: boolean, result: Course}> {
-        return this.http.post<{successful: boolean, result: Course}>(`${this.BASE_URL}/courses/add`, course);
+    createCourse(course: Course): Observable<CoursesResponse> {
+        return this.http.post<CoursesResponse>(`${this.BASE_URL}/courses/add`, course);
     }
 
-    editCourse(id: string, course: Course): Observable<{successful: boolean, result: Course}> {
-        return this.http.put<{successful: boolean, result: Course}>(`${this.BASE_URL}/courses/${id}`, course);
+    editCourse(id: string, course: Course): Observable<CoursesResponse> {
+        return this.http.put<CoursesResponse>(`${this.BASE_URL}/courses/${id}`, course);
     }
 
-    getCourse(id: string): Observable<{successful: boolean, result: Course}> {
-        return this.http.get<{successful: boolean, result: Course}>(`${this.BASE_URL}/courses/${id}`);
+    getCourse(id: string): Observable<CoursesResponse> {
+        return this.http.get<CoursesResponse>(`${this.BASE_URL}/courses/${id}`);
     }
 
     deleteCourse(id: string): Observable<void> {

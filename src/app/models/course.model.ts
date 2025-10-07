@@ -6,3 +6,8 @@ export interface Course {
     authors: string[];
     creationDate: string | Date;
 }
+
+export type CoursesResponse = {
+  successful: boolean;
+  result: Course[];
+};

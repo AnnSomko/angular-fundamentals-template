@@ -10,7 +10,6 @@ import { Course } from '@app/models/course.model';
 export class CourseListComponent {
   @Input() courses: Course[] = [];
   @Input() editable: boolean = false;
-  @Input() authorsList: Author[] = [];
 
   @Output() showCourse = new EventEmitter<string>();
   @Output() editCourse = new EventEmitter<string>();
@@ -18,7 +17,6 @@ export class CourseListComponent {
 
   onShow(courseId: string) {
     this.showCourse.emit(courseId);
-    console.log('CourseListComponent emitted id:', courseId);
   }
 
   onEdit(courseId: string) {
@@ -27,12 +25,5 @@ export class CourseListComponent {
 
   onDelete(courseId: string) {
     this.deleteCourse.emit(courseId);
-  }
-
-   getAuthorNames(authorIds: string[]): string {
-    return this.authorsList
-      .filter(a => authorIds.includes(a.id))
-      .map(a => a.name)
-      .join(', ');
   }
 }

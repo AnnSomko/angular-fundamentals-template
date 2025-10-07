@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, finalize, map, Observable, tap } from 'rxjs';
 import { CoursesService } from './courses.service';
-import { Course } from '@app/models/course.model';
+import { Course, CoursesResponse } from '@app/models/course.model';
 import { Author } from '@app/models/author.model';
 
 @Injectable({
@@ -31,8 +31,8 @@ export class CoursesStoreService {
       });
   }
 
-  getCourse(id: string): Observable<Course> {
-    return this.coursesService.getCourse(id).pipe(map((res) => res.result));
+  getCourse(id: string): Observable<CoursesResponse> {
+    return this.coursesService.getCourse(id);
   }
 
   createCourse(course: Course): void {

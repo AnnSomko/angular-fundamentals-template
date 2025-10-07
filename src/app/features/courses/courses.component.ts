@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SessionStorageService } from '@app/auth/services/session-storage.service';
 import { Author } from '@app/models/author.model';
 import { Course } from '@app/models/course.model';
 import { CoursesStoreService } from '@app/services/courses-store.service';
@@ -12,15 +13,15 @@ import { Observable } from 'rxjs/internal/Observable';
   styleUrls: ['./courses.component.scss']
 })
 export class CoursesComponent implements OnInit {
-  courses$: Observable<Course[]>;
-  filteredCourses: Course[] = [];
-  isAdmin$: Observable<boolean>;
-  authors$: Author[] = [];
-  authorsList: any;
+  courses$ = this.coursesStore.courses$;
+  isLoading$ = this.coursesStore.loading$;
+  isAdmin$ = this.userStore.isAdmin$;
+
+  searchValue: string = "";
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
+    private session: SessionStorageService,
     private coursesStore: CoursesStoreService,
     private userStore: UserStoreService
   ) {
@@ -28,20 +29,21 @@ export class CoursesComponent implements OnInit {
     this.isAdmin$ = this.userStore.isAdmin$;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.coursesStore.getAll();
-    this.courses$.subscribe(courses => this.filteredCourses = [...courses]);
-
-    this.coursesStore.getAllAuthors();
-    this.coursesStore.authors$.subscribe(authors => {
-      this.authorsList = authors || [];
-    });
+    const token = this.session.getToken();
+    if (token) {
+      this.userStore.getUser();
+    }
   }
 
-  onSearch(query: string) {
-    this.filteredCourses = this.filteredCourses.filter(course =>
-      course.title.toLowerCase().includes(query.toLowerCase())
-    );
+  onSearch() {
+     const value = this.searchValue.trim();
+    if (value) {
+      this.coursesStore.filterCourses(value);
+    } else {
+      this.coursesStore.getAll();
+    }
   }
 
   onShow(courseId: string) {
@@ -58,16 +60,5 @@ export class CoursesComponent implements OnInit {
 
   onAddCourse() {
     this.router.navigate(['/courses/add']);
-  }
-
-  getAuthorNames(authorIds: string[]) {
-    if (!authorIds || !this.authors$ || this.authorsList.length === 0) {
-      return '';
-    }
-
-    return authorIds
-      .map(id => this.authorsList.find((a: { id: string; }) => a.id === id)?.name || '')
-      .filter(name => !!name)
-      .join(', ');
   }
 }
