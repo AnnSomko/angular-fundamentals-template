@@ -1,15 +1,16 @@
 <div class="course-list">
   <app-course-card
     *ngFor="let course of courses"
+    
     [title]="course.title"
     [description]="course.description"
     [creationDate]="course.creationDate"
     [duration]="course.duration"
     [authors]="getAuthorNames(course.authors)"
     [editable]="editable"
-    (clickOnShow)="onShow(course.id)"
-    (clickOnEdit)="onEdit(course.id)"
-    (clickOnDelete)="onDelete(course.id)"
+    (showCourse)="onShow(course.id)"
+    (editCourse)="onEdit(course.id)"
+    (deleteCourse)="onDelete(course.id)"
   >
   </app-course-card>
 </div>

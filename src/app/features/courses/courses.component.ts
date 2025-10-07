@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Author } from '@app/models/author.model';
 import { Course } from '@app/models/course.model';
 import { CoursesStoreService } from '@app/services/courses-store.service';
 import { UserStoreService } from '@app/user/services/user-store.service';
@@ -14,6 +15,8 @@ export class CoursesComponent implements OnInit {
   courses$: Observable<Course[]>;
   filteredCourses: Course[] = [];
   isAdmin$: Observable<boolean>;
+  authors$: Author[] = [];
+  authorsList: any;
 
   constructor(
     private router: Router,
@@ -28,6 +31,11 @@ export class CoursesComponent implements OnInit {
   ngOnInit() {
     this.coursesStore.getAll();
     this.courses$.subscribe(courses => this.filteredCourses = [...courses]);
+
+    this.coursesStore.getAllAuthors();
+    this.coursesStore.authors$.subscribe(authors => {
+      this.authorsList = authors || [];
+    });
   }
 
   onSearch(query: string) {
@@ -36,12 +44,8 @@ export class CoursesComponent implements OnInit {
     );
   }
 
-  getAuthorNames(authors: string[]) {
-    return authors.join(', ');
-  }
-
   onShow(courseId: string) {
-    this.router.navigate([`/courses/${courseId}`]);
+    this.router.navigate([`/courses/show/${courseId}`]);
   }
 
   onEdit(courseId: string) {
@@ -54,5 +58,16 @@ export class CoursesComponent implements OnInit {
 
   onAddCourse() {
     this.router.navigate(['/courses/add']);
+  }
+
+  getAuthorNames(authorIds: string[]) {
+    if (!authorIds || !this.authors$ || this.authorsList.length === 0) {
+      return '';
+    }
+
+    return authorIds
+      .map(id => this.authorsList.find((a: { id: string; }) => a.id === id)?.name || '')
+      .filter(name => !!name)
+      .join(', ');
   }
 }

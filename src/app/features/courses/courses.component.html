@@ -12,12 +12,12 @@
   buttonText="Add new course" 
   (click)="onAddCourse();">
 </app-button>
-
 </app-course-info>
 
 <app-course-list
   [courses]="filteredCourses"
-  [editable]="true"
+  [editable]="(isAdmin$ | async) ?? false"
+  [authorsList]="authors$"
   (showCourse)="onShow($event)"
   (editCourse)="onEdit($event)"
   (deleteCourse)="onDelete($event)">

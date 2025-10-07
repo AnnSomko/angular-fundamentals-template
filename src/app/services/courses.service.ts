@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Course } from '@app/models/course.model';
 import { Author } from '@app/models/author.model';
 
@@ -9,11 +9,14 @@ import { Author } from '@app/models/author.model';
 })
 
 export class CoursesService {
-    private readonly BASE_URL = 'http://localhost:4000/api';
+    private readonly BASE_URL = 'http://localhost:4000';
     constructor(private http: HttpClient) { }
 
     getAll(): Observable<Course[]> {
-        return this.http.get<Course[]>(`${this.BASE_URL}/courses/all`);
+        return this.http.get<{successful: boolean, result: Course[]}>(`${this.BASE_URL}/courses/all`)
+        .pipe(
+            map(response => response.result)
+        );
     }
 
     createCourse(course: Course) {

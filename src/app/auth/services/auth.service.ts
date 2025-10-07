@@ -2,19 +2,19 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { SessionStorageService } from './session-storage.service';
-import { LoginPayload, RegisterPayload, User } from '@app/models/user.model';
+import { User } from '@app/models/user.model';
 
-const API_URL = "http://localhost:4000/api";
-const TOKEN = "SESSION_TOKEN";
+const API_URL = "http://localhost:4000";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private isAuthorized$$ = new BehaviorSubject<boolean>(
+    private isAuthorized$$ = new BehaviorSubject<boolean>(
     !!this.sessionStorage.getToken()
   );
-  public isAuthorized$: Observable<boolean> = this.isAuthorized$$.asObservable();
+  public isAuthorized$: Observable<boolean> =
+    this.isAuthorized$$.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -25,7 +25,7 @@ export class AuthService {
     return this.sessionStorage.getToken();
   }
 
-  login(user: LoginPayload): Observable<{ token: string }> {
+  login(user: User): Observable<{ token: string }> {
     return this.http.post<{ token: string }>(`${API_URL}/login`, user).pipe(
       tap((response) => {
         if (response.token) {
@@ -41,7 +41,7 @@ export class AuthService {
     this.isAuthorized = false;
   }
 
-  register(user: RegisterPayload): Observable<{ token: string }> {
+  register(user: User): Observable<{ token: string }> {
     return this.http.post<{ token: string }>(`${API_URL}/register`, user).pipe(
       tap((response) => {
         if (response.token) {
@@ -61,6 +61,6 @@ export class AuthService {
   }
 
   getLoginUrl(): string {
-    return `${API_URL}/login`;
+     return `${API_URL}/login`;
   }
 }

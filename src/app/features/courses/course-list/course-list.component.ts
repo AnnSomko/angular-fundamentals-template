@@ -1,15 +1,16 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Author } from '@app/models/author.model';
 import { Course } from '@app/models/course.model';
-import { mockedAuthorsList } from '@app/shared/mocks/mocks';
 
 @Component({
   selector: 'app-course-list',
   templateUrl: './course-list.component.html',
-  styleUrls: ['./course-list.component.css']
+  styleUrls: ['./course-list.component.scss']
 })
 export class CourseListComponent {
   @Input() courses: Course[] = [];
   @Input() editable: boolean = false;
+  @Input() authorsList: Author[] = [];
 
   @Output() showCourse = new EventEmitter<string>();
   @Output() editCourse = new EventEmitter<string>();
@@ -17,6 +18,7 @@ export class CourseListComponent {
 
   onShow(courseId: string) {
     this.showCourse.emit(courseId);
+    console.log('CourseListComponent emitted id:', courseId);
   }
 
   onEdit(courseId: string) {
@@ -27,7 +29,10 @@ export class CourseListComponent {
     this.deleteCourse.emit(courseId);
   }
 
-  getAuthorNames(authorIds: string[]): string[] {
-  return authorIds.map(id => mockedAuthorsList.find(a => a.id === id)?.name || '');
-}
+   getAuthorNames(authorIds: string[]): string {
+    return this.authorsList
+      .filter(a => authorIds.includes(a.id))
+      .map(a => a.name)
+      .join(', ');
+  }
 }

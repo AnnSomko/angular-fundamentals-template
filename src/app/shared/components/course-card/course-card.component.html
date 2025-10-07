@@ -5,18 +5,18 @@
   </div>
   <div class="course-card__info">
     <div class="course-card__info-text">
-      <div><b>Authors: </b>{{ authors.join(', ') }}</div>
+      <div><b>Authors: </b>{{ authors }}</div>
       <div><b>Duration: </b><span class="course-card__duration">{{ duration | duration }}</span></div>
       <div><b>Created: </b><span class="course-card__date">{{ creationDate | customDate }}</span></div>
     </div>
     <div class="course-card__info-actions">
       
       <div class="course-card__buttons-group" *ngIf="editable">
-        <app-button buttonText="Show course" (click)="showCourse()"></app-button>
+        <app-button buttonText="Show course" (click)="showCourse.emit(id)"></app-button>
 
-        <app-button [iconSrc]="'assets/edit-icon.svg'" (click)="editCourse.emit(title)">
+        <app-button [iconSrc]="'assets/edit-icon.svg'" (click)="editCourse.emit(id)">
         </app-button>
-        <app-button [iconSrc]="'assets/delete-icon.svg'" (click)="deleteCourse.emit(title)">
+        <app-button [iconSrc]="'assets/delete-icon.svg'" (click)="deleteCourse.emit(id)">
         </app-button>
       </div>
     </div>

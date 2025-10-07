@@ -1,4 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CoursesService } from '@app/services/courses.service';
+import { Observable } from 'rxjs';
 
 interface Course {
   id: string;
@@ -14,12 +17,27 @@ interface Course {
   templateUrl: './course-info.component.html',
   styleUrls: ['./course-info.component.scss']
 })
-export class CourseInfoComponent {
-   @Input() course!: Course;
+export class CourseInfoComponent implements OnInit {
+  courseId!: string | null;
+  course$!: Observable<Course>;
 
-   @Output() back = new EventEmitter<void>();
+  constructor(
+    private route: ActivatedRoute,
+    private coursesService: CoursesService,
+    private router: Router
+  ) { }
 
-    onBack() {
-      this.back.emit();
+
+  @Output() back = new EventEmitter<void>();
+
+  ngOnInit() {
+    this.courseId = this.route.snapshot.paramMap.get('id');
+    if (this.courseId) {
+      this.course$ = this.coursesService.getCourse(this.courseId);
     }
+  }
+
+  onBack() {
+    this.router.navigate(['/courses']);
+  }
 }

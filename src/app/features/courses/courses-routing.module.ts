@@ -7,10 +7,10 @@ import { CourseInfoComponent } from '../course-info/course-info.component';
 import { CoursesComponent } from './courses.component';
 
 const routes: Routes = [
-  { path: '', component: CoursesComponent, canActivate: [AuthorizedGuard] }, 
-  { path: 'show/:id', component: CourseInfoComponent, canActivate: [AuthorizedGuard] },
-  { path: 'add', component: CourseFormComponent, canActivate: [AuthorizedGuard, AdminGuard] },
-  { path: 'edit/:id', component: CourseFormComponent, canActivate: [AuthorizedGuard, AdminGuard] }
+  { path: '', component: CoursesComponent },
+  { path: 'add', canActivate: [AdminGuard], component: CourseFormComponent },
+  { path: 'edit/:id', canActivate: [AdminGuard], component: CourseFormComponent },
+  { path: 'show/:id', component: CourseInfoComponent }
 ];
 
 @NgModule({
