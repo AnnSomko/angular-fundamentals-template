@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { SessionStorageService } from './session-storage.service';
-import { User } from '@app/models/user.model';
+import { LoginPayload, RegisterPayload, User } from '@app/models/user.model';
 
 const API_URL = "http://localhost:4000";
 
@@ -25,7 +25,7 @@ export class AuthService {
     return this.sessionStorage.getToken();
   }
 
-  login(user: User): Observable<{ token: string }> {
+  login(user: LoginPayload): Observable<{ token: string }> {
     return this.http.post<{ token: string }>(`${API_URL}/login`, user).pipe(
       tap((response) => {
         if (response.token) {
@@ -41,7 +41,7 @@ export class AuthService {
     this.isAuthorized = false;
   }
 
-  register(user: User): Observable<{ token: string }> {
+  register(user: RegisterPayload): Observable<{ token: string }> {
     return this.http.post<{ token: string }>(`${API_URL}/register`, user).pipe(
       tap((response) => {
         if (response.token) {
