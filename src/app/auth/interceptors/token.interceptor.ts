@@ -13,7 +13,11 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService, 
+    private router: Router,
+    private sessionStorageService: SessionStorageService
+  ) {}
 
   intercept(
     req: HttpRequest<any>,
@@ -33,6 +37,7 @@ export class TokenInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           this.authService.logout();
+          this.sessionStorageService.deleteToken();
           this.router.navigate(["/login"]);
         }
         return throwError(() => error);
@@ -40,31 +45,3 @@ export class TokenInterceptor implements HttpInterceptor {
     );
   }
 }
-// @Injectable()
-// export class TokenInterceptor implements HttpInterceptor {
-//   constructor(
-//     private authService: AuthService, 
-//     private router: Router
-//   ) {}
-
-//   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-//     const token = this.authService.getToken();
-
-//     let authReq = req;
-//     if (token) {
-//       authReq = req.clone({
-//         setHeaders: { Authorization: `Bearer ${token}` }
-//       });
-//     }
-
-//     return next.handle(authReq).pipe(
-//       catchError((error: HttpErrorResponse) => {
-//         if (error.status === 401) {
-//           this.authService.logout();
-//           this.router.navigate(['/login']);
-//         }
-//         return throwError(() => error);
-//       })
-//     );
-//   }
-// }

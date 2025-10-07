@@ -12,23 +12,20 @@ export class CoursesService {
     private readonly BASE_URL = 'http://localhost:4000';
     constructor(private http: HttpClient) { }
 
-    getAll(): Observable<Course[]> {
+    getAll(): Observable<{successful: boolean, result: Course[]}> {
         return this.http.get<{successful: boolean, result: Course[]}>(`${this.BASE_URL}/courses/all`)
-        .pipe(
-            map(response => response.result)
-        );
     }
 
-    createCourse(course: Course) {
-        return this.http.post<Course>(`${this.BASE_URL}/courses`, course);
+    createCourse(course: Course): Observable<{successful: boolean, result: Course}> {
+        return this.http.post<{successful: boolean, result: Course}>(`${this.BASE_URL}/courses/add`, course);
     }
 
-    editCourse(id: string, course: Course) {
-        return this.http.put<Course>(`${this.BASE_URL}/courses/${id}`, course);
+    editCourse(id: string, course: Course): Observable<{successful: boolean, result: Course}> {
+        return this.http.put<{successful: boolean, result: Course}>(`${this.BASE_URL}/courses/${id}`, course);
     }
 
-    getCourse(id: string): Observable<Course> {
-        return this.http.get<Course>(`${this.BASE_URL}/courses/${id}`);
+    getCourse(id: string): Observable<{successful: boolean, result: Course}> {
+        return this.http.get<{successful: boolean, result: Course}>(`${this.BASE_URL}/courses/${id}`);
     }
 
     deleteCourse(id: string): Observable<void> {
@@ -44,7 +41,7 @@ export class CoursesService {
     }
 
     createAuthor(name: string): Observable<Author> {
-        return this.http.post<Author>(`${this.BASE_URL}/authors`, { name });
+        return this.http.post<Author>(`${this.BASE_URL}/authors/add`, { name });
     }
 
     getAuthorById(id: string): Observable<Author> {

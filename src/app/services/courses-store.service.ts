@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, finalize, map, Observable, tap } from 'rxjs';
 import { CoursesService } from './courses.service';
 import { Course } from '@app/models/course.model';
 import { Author } from '@app/models/author.model';
@@ -20,55 +20,43 @@ export class CoursesStoreService {
 
   constructor(private coursesService: CoursesService) { }
 
-  getAll(): void {
+  getAll() {
     this.loading$$.next(true);
-    this.coursesService.getAll().subscribe(courses => {
-      console.log('courses from backend', courses);
-      this.courses$$.next(courses);
-      this.loading$$.next(false);
-    });
+    this.coursesService
+      .getAll()
+      .pipe(finalize(() => this.loading$$.next(false)))
+      .subscribe({
+        next: (response) => this.courses$$.next(response.result),
+        error: () => this.courses$$.next([]),
+      });
   }
 
   getCourse(id: string): Observable<Course> {
-    return this.coursesService.getCourse(id);
+    return this.coursesService.getCourse(id).pipe(map((res) => res.result));
   }
 
   createCourse(course: Course): void {
     this.loading$$.next(true);
-    this.coursesService.createCourse(course)
-      .pipe(
-        tap(newCourse => {
-          this.courses$$.next([...this.courses$$.value, newCourse]);
-          this.loading$$.next(false);
-        })
-      )
-      .subscribe();
+    this.coursesService
+      .createCourse(course)
+      .pipe(finalize(() => this.loading$$.next(false)))
+      .subscribe(() => this.getAll());
   }
 
   editCourse(id: string, course: Course): void {
     this.loading$$.next(true);
-    this.coursesService.editCourse(id, course)
-      .pipe(
-        tap(updatedCourse => {
-          const updated = this.courses$$.value.map(c => c.id === id ? updatedCourse : c);
-          this.courses$$.next(updated);
-          this.loading$$.next(false);
-        })
-      )
-      .subscribe();
+    this.coursesService
+      .editCourse(id, course)
+      ?.pipe(finalize(() => this.loading$$.next(false)))
+      .subscribe(() => this.getAll());
   }
 
   deleteCourse(id: string): void {
     this.loading$$.next(true);
-    this.coursesService.deleteCourse(id)
-      .pipe(
-        tap(() => {
-          const filtered = this.courses$$.value.filter(c => c.id !== id);
-          this.courses$$.next(filtered);
-          this.loading$$.next(false);
-        })
-      )
-      .subscribe();
+    this.coursesService
+      .deleteCourse(id)
+      ?.pipe(finalize(() => this.loading$$.next(false)))
+      .subscribe(() => this.getAll());
   }
 
   filterCourses(value: string): void {
@@ -81,11 +69,20 @@ export class CoursesStoreService {
   }
 
   getAllAuthors(): void {
-    this.coursesService.getAllAuthors()
-      .subscribe(authors => this.authors$$.next(authors));
+    this.loading$$.next(true);
+    this.coursesService
+      .getAllAuthors()
+      .pipe(
+        finalize(() => this.loading$$.next(false))
+      )
+      .subscribe({
+        next: (authors) => this.authors$$.next(authors),
+        error: () => this.authors$$.next([]),
+      });
   }
 
   createAuthor(name: string): void {
+    this.loading$$.next(true);
     this.coursesService.createAuthor(name)
       .pipe(
         tap(newAuthor => {
@@ -96,6 +93,9 @@ export class CoursesStoreService {
   }
 
   getAuthorById(id: string): Observable<Author> {
-    return this.coursesService.getAuthorById(id);
+    this.loading$$.next(true);
+    return this.coursesService.getAuthorById(id).pipe(
+      finalize(() => this.loading$$.next(false))
+    );
   }
 }
