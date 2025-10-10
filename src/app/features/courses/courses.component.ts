@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { SessionStorageService } from '@app/auth/services/session-storage.service';
-import { Author } from '@app/models/author.model';
+import { Router } from '@angular/router';
 import { Course } from '@app/models/course.model';
 import { CoursesStoreService } from '@app/services/courses-store.service';
 import { UserStoreService } from '@app/user/services/user-store.service';
-import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'app-courses',
@@ -21,7 +18,6 @@ export class CoursesComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private session: SessionStorageService,
     private coursesStore: CoursesStoreService,
     private userStore: UserStoreService
   ) {
@@ -31,14 +27,11 @@ export class CoursesComponent implements OnInit {
 
   ngOnInit(): void {
     this.coursesStore.getAll();
-    const token = this.session.getToken();
-    if (token) {
-      this.userStore.getUser();
-    }
+    this.userStore.getUser();
   }
 
   onSearch() {
-     const value = this.searchValue.trim();
+    const value = this.searchValue.trim();
     if (value) {
       this.coursesStore.filterCourses(value);
     } else {
@@ -46,8 +39,12 @@ export class CoursesComponent implements OnInit {
     }
   }
 
-  onShow(courseId: string) {
-    this.router.navigate([`/courses/show/${courseId}`]);
+  onShow(course: Course) {
+    this.router.navigate(["/courses", course.id]);
+  }
+
+  showList() {
+    this.router.navigate(["/courses"]);
   }
 
   onEdit(courseId: string) {

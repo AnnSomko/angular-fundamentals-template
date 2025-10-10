@@ -11,3 +11,8 @@ export type CoursesResponse = {
   successful: boolean;
   result: Course[];
 };
+
+export type CourseResponse = {
+  successful: boolean;
+  result: Course;
+};

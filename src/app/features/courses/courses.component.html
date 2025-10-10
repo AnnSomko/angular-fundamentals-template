@@ -15,9 +15,9 @@
 </app-course-info>
 
 <app-course-list
-  *ngIf="(courses$ | async) as list"
-  [courses]="list"
-  [editable]="(isAdmin$ | async) === true"
+  *ngIf="!(isLoading$ | async) && ((courses$ | async) || []).length > 0"
+  [courses]="(courses$ | async) || []"
+  [editable]="(isAdmin$ | async) || false"
   (showCourse)="onShow($event)"
   (editCourse)="onEdit($event)"
   (deleteCourse)="onDelete($event)">

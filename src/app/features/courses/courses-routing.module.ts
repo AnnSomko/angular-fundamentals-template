@@ -8,8 +8,8 @@ import { CoursesComponent } from './courses.component';
 
 const routes: Routes = [
   { path: '', component: CoursesComponent },
-  { path: 'add', canActivate: [AdminGuard], component: CourseFormComponent },
-  { path: 'edit/:id', canActivate: [AdminGuard], component: CourseFormComponent },
+  { path: 'add', component: CourseFormComponent, canActivate: [AdminGuard] },
+  { path: 'edit/:id', component: CourseFormComponent, canActivate: [AdminGuard] },
   { path: 'show/:id', component: CourseInfoComponent }
 ];
 

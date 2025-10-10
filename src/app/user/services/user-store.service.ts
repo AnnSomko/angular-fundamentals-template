@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { User, UserService } from './user.service';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
+import { UserService } from './user.service';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class UserStoreService {
   private name$$ = new BehaviorSubject<string | null>(null);
@@ -14,28 +14,32 @@ export class UserStoreService {
 
   constructor(private userService: UserService) { }
 
-    getUser() {
-      this.userService.getUser()
-      .pipe(
-        tap({
-          next: (user: User) => {
-            this.name$$.next(user?.name || null);
-            this.isAdmin$$.next(!!user?.isAdmin);
-          },
-          error: () => {
-            this.name$$.next(null);
-            this.isAdmin$$.next(false);
-          },
-        })
-      )
-      .subscribe();
-    }
+  getUser() {
+    this.userService
+      .getUser()
+      .pipe(map((res) => res.result))
+      .subscribe({
+        next: (user) => {
+          console.log("USER FROM BACKEND:", user);
+          this.name$$.next(user.name);
+          const isAdmin = !!(user.role && user.role.toLowerCase() === "admin");
+          this.isAdmin$$.next(isAdmin);
+          console.log("isAdmin:", isAdmin);
+        },
+         error: (err) => {
+          console.log("getUser error:", err);
+          this.name$$.next("");
+          this.isAdmin$$.next(false);
+        }
+      })
 
-    get isAdmin() {
-        return this.isAdmin$$.getValue();
-    }
+  }
 
-    set isAdmin(value: boolean) {
-        this.isAdmin$$.next(value);
-    }
+  get isAdmin() {
+    return this.isAdmin$$.value;
+  }
+
+  set isAdmin(value: boolean) {
+    this.isAdmin$$.next(value);
+  }
 }

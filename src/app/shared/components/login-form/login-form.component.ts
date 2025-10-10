@@ -1,8 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/auth/services/auth.service';
+import { SessionStorageService } from '@app/auth/services/session-storage.service';
 import { UserStoreService } from '@app/user/services/user-store.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login-form',

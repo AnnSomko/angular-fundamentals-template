@@ -5,6 +5,14 @@ export interface User {
   role: 'admin' | 'user';
 }
 
+export interface UserResponse {
+  successful: boolean;
+  result: {
+    name: string;
+    role: string;
+  };
+}
+
 export interface LoginPayload {
   email: string;
   password: string;

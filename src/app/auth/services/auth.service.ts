@@ -4,12 +4,11 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { SessionStorageService } from './session-storage.service';
 import { LoginPayload, RegisterPayload, User } from '@app/models/user.model';
 
-const API_URL = "http://localhost:4000";
-
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private readonly API_URL = "http://localhost:4000";
     private isAuthorized$$ = new BehaviorSubject<boolean>(
     !!this.sessionStorage.getToken()
   );
@@ -26,7 +25,7 @@ export class AuthService {
   }
 
   login(user: LoginPayload): Observable<{ token: string }> {
-    return this.http.post<{ token: string }>(`${API_URL}/login`, user).pipe(
+    return this.http.post<{ token: string }>(`${this.API_URL}/login`, user).pipe(
       tap((response) => {
         if (response.token) {
           this.sessionStorage.setToken(response.token);
@@ -42,7 +41,7 @@ export class AuthService {
   }
 
   register(user: RegisterPayload): Observable<{ token: string }> {
-    return this.http.post<{ token: string }>(`${API_URL}/register`, user).pipe(
+    return this.http.post<{ token: string }>(`${this.API_URL}/register`, user).pipe(
       tap((response) => {
         if (response.token) {
           this.sessionStorage.setToken(response.token);
@@ -61,6 +60,6 @@ export class AuthService {
   }
 
   getLoginUrl(): string {
-     return `${API_URL}/login`;
+     return `${this.API_URL}/login`;
   }
 }

@@ -31,8 +31,8 @@ export class CoursesStoreService {
       });
   }
 
-  getCourse(id: string): Observable<CoursesResponse> {
-    return this.coursesService.getCourse(id);
+  getCourse(id: string): Observable<Course> {
+    return this.coursesService.getCourse(id).pipe(map(response => response.result));
   }
 
   createCourse(course: Course): void {
@@ -60,11 +60,23 @@ export class CoursesStoreService {
   }
 
   filterCourses(value: string): void {
+    if (value.trim() === "") {
+      this.getAll();
+      return;
+    }
     this.loading$$.next(true);
-    this.coursesService.filterCourses(value)
-      .subscribe(courses => {
-        this.courses$$.next(courses);
-        this.loading$$.next(false);
+    this.coursesService
+      .getAll()
+      .pipe(finalize(() => this.loading$$.next(false)))
+      .subscribe({
+        next: (response) => {
+          const search = value.trim().toLowerCase();
+          const filtered = response.result.filter((course) =>
+            course.title.toLowerCase().includes(search)
+          );
+          this.courses$$.next(filtered);
+        },
+        error: () => this.courses$$.next([]),
       });
   }
 

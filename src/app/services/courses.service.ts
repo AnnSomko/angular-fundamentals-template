@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { Course, CoursesResponse } from '@app/models/course.model';
+import { Course, CourseResponse, CoursesResponse } from '@app/models/course.model';
 import { Author } from '@app/models/author.model';
 
 @Injectable({
@@ -24,8 +24,8 @@ export class CoursesService {
         return this.http.put<CoursesResponse>(`${this.BASE_URL}/courses/${id}`, course);
     }
 
-    getCourse(id: string): Observable<CoursesResponse> {
-        return this.http.get<CoursesResponse>(`${this.BASE_URL}/courses/${id}`);
+    getCourse(id: string): Observable<CourseResponse> {
+        return this.http.get<CourseResponse>(`${this.BASE_URL}/courses/${id}`);
     }
 
     deleteCourse(id: string): Observable<void> {
