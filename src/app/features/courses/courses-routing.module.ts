@@ -8,9 +8,9 @@ import { CoursesComponent } from './courses.component';
 
 const routes: Routes = [
   { path: '', component: CoursesComponent },
-  { path: 'add', component: CourseFormComponent, canActivate: [AdminGuard] },
-  { path: 'edit/:id', component: CourseFormComponent, canActivate: [AdminGuard] },
-  { path: 'show/:id', component: CourseInfoComponent }
+  { path: 'courses/add', component: CourseFormComponent }, //canActivate: [AdminGuard]
+  { path: 'courses/edit/:id', component: CourseFormComponent }, //canActivate: [AdminGuard]
+  { path: 'courses/:id', component: CourseInfoComponent }
 ];
 
 @NgModule({

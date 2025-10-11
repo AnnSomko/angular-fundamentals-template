@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Author } from '@app/models/author.model';
 import { Course } from '@app/models/course.model';
 
 @Component({
@@ -6,16 +7,17 @@ import { Course } from '@app/models/course.model';
   templateUrl: './course-card.component.html',
   styleUrls: ['./course-card.component.scss']
 })
-export class CourseCardComponent implements OnInit {
+export class CourseCardComponent {
   @Input() course!: Course;
+  @Input() authors: Author[] = [];
   @Input() editable: boolean = true;
 
-  @Output() showCourse = new EventEmitter<string>();
+  @Output() showCourse = new EventEmitter<Course>();
   @Output() editCourse = new EventEmitter<string>();
   @Output() deleteCourse = new EventEmitter<string>();
 
   onShow() {
-    this.showCourse.emit(this.course.id);
+    this.showCourse.emit(this.course);
   }
 
   onEdit() {
@@ -26,7 +28,14 @@ export class CourseCardComponent implements OnInit {
     this.deleteCourse.emit(this.course.id);
   }
 
-  ngOnInit(): void {
-    console.log("CourseCard editable:", this.editable, "course:", this.course);
+  get authorNames(): string {
+    if (!this.course?.authors?.length) return 'Authors';
+
+    return this.course.authors
+      .map(authorId => {
+        const author = this.authors.find(a => a.id === authorId);
+        return author ? author.name : 'Unknown';
+      })
+      .join(', ');
   }
 }

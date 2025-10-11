@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Course } from '@app/models/course.model';
 import { CoursesStoreService } from '@app/services/courses-store.service';
-import { CoursesService } from '@app/services/courses.service';
 
 @Component({
   selector: 'app-course-info',

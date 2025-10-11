@@ -29,6 +29,7 @@ export class LoginFormComponent {
       this.authService.login({ email, password }).subscribe({
         next: () => {
           this.userStore.getUser();
+          console.log('Token now:', sessionStorage.getItem('token'));
           this.router.navigate(['/courses']);
         },
         error: () => this.errorMessage = 'Invalid email or password'

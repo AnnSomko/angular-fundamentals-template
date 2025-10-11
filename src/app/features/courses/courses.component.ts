@@ -11,10 +11,9 @@ import { UserStoreService } from '@app/user/services/user-store.service';
 })
 export class CoursesComponent implements OnInit {
   courses$ = this.coursesStore.courses$;
+  authors$ = this.coursesStore.authors$;
   isLoading$ = this.coursesStore.loading$;
   isAdmin$ = this.userStore.isAdmin$;
-
-  searchValue: string = "";
 
   constructor(
     private router: Router,
@@ -27,11 +26,11 @@ export class CoursesComponent implements OnInit {
 
   ngOnInit(): void {
     this.coursesStore.getAll();
-    this.userStore.getUser();
+    this.coursesStore.getAllAuthors();
   }
 
-  onSearch() {
-    const value = this.searchValue.trim();
+  onSearch(query: string) {
+    const value = query.trim();
     if (value) {
       this.coursesStore.filterCourses(value);
     } else {

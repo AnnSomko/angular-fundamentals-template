@@ -24,12 +24,16 @@ export class AuthService {
     return this.sessionStorage.getToken();
   }
 
-  login(user: LoginPayload): Observable<{ token: string }> {
-    return this.http.post<{ token: string }>(`${this.API_URL}/login`, user).pipe(
+  login(user: LoginPayload): Observable<any> {
+    return this.http.post<any>(`${this.API_URL}/login`, user).pipe(
       tap((response) => {
-        if (response.token) {
-          this.sessionStorage.setToken(response.token);
-          this.isAuthorized = true;
+        console.log('Login response:', response);
+        if (response.result) {
+          const token = response.result.replace(/^Bearer\s+/i, '');
+          this.sessionStorage.setToken(token);
+          console.log('Token saved in sessionStorage:', this.sessionStorage.getToken());
+          this.isAuthorized$$.next(true);
+          console.log('Token now saved:', response.token);
         }
       })
     );

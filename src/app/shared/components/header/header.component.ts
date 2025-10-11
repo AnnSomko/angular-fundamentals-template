@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/auth/services/auth.service';
+import { UserStoreService } from '@app/user/services/user-store.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -10,9 +11,15 @@ import { Observable } from 'rxjs';
 })
 export class HeaderComponent {
   isAuthorized$: Observable<boolean>;
+  name$: Observable<string | null>;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(
+    private authService: AuthService, 
+    private router: Router,
+    private userStore: UserStoreService
+  ) {
     this.isAuthorized$ = this.authService.isAuthorized$;
+    this.name$ = this.userStore.name$
   }
 
   onAuthButtonClick() {

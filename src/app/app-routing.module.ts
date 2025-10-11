@@ -8,18 +8,18 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginFormComponent,
-    canActivate: [NotAuthorizedGuard],
+    // canActivate: [NotAuthorizedGuard],
   },
   {
     path: 'registration',
     component: RegistrationFormComponent,
-    canActivate: [NotAuthorizedGuard],
+    // canActivate: [NotAuthorizedGuard],
   },
   {
     path: 'courses',
     loadChildren: () =>
       import('./features/courses/courses.module').then(m => m.CourseModule),
-    canLoad: [AuthorizedGuard]
+    // canLoad: [AuthorizedGuard]
   },
   { path: '', redirectTo: '/courses', pathMatch: 'full' },
   { path: '**', redirectTo: 'courses' },

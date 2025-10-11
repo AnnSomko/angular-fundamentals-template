@@ -26,11 +26,14 @@ export class TokenInterceptor implements HttpInterceptor {
     const token = this.authService.getToken();
 
     if (token) {
+      console.log('Adding token to request:', token, 'URL:', request.url);
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${token}`,
         },
       });
+    } else {
+      console.log('No token found for request:', request.url);
     }
 
     return next.handle(request).pipe(

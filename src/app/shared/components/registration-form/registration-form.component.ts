@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/auth/services/auth.service';
+import { UserStoreService } from '@app/user/services/user-store.service';
 
 @Component({
   selector: 'app-registration-form',
@@ -14,6 +15,7 @@ export class RegistrationFormComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private userStore: UserStoreService,
     private router: Router,
     private fb: FormBuilder
   ) { }
@@ -30,12 +32,17 @@ export class RegistrationFormComponent implements OnInit {
     this.submitted = true;
 
     if (this.registrationForm.valid) {
-      console.log('Form submitted:', this.registrationForm.value);
-
       this.authService.register(this.registrationForm.value).subscribe({
-        next: (response) => {
-          console.log('Registration successful, token:', response.token);
-          this.router.navigate(['/courses']);
+        next: () => {
+          this.authService.login({
+            email: this.registrationForm.value.email,
+            password: this.registrationForm.value.password
+          }).subscribe({
+            next: () => {
+            this.userStore.getUser();
+            this.router.navigate(['/courses']);
+            }
+          })
         },
         error: (error) => {
           console.error('Registration error:', error);
