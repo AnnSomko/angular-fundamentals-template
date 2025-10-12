@@ -34,7 +34,7 @@ export class CoursesStoreService {
 
   editCourse(id: string, course: Course): Observable<Course> {
     return this.coursesService.editCourse(id, course).pipe(
-      map(response => response.result)
+      map(response => response.result as Course)
     );
   }
 
