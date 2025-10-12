@@ -25,7 +25,7 @@ export const requestSingleCourse = createAction(
 
 export const requestSingleCourseSuccess = createAction(
   CoursesConstants.REQUEST_SINGLE_COURSE_SUCCESS,
-  props<{ course: Course }>()
+  props<{ course: Partial<Course> }>()
 )
 
 export const requestSingleCourseFail = createAction(
@@ -42,7 +42,7 @@ export const requestFilteredCourses = createAction(
 
 export const requestFilteredCoursesSuccess = createAction(
   CoursesConstants.REQUEST_FILTERED_COURSES_SUCCESS,
-  props<{ courses : Course[] }>()
+  props<{ courses : Partial<Course>[] }>()
 )
 
 export const requestFilteredCoursesFail = createAction(
@@ -58,7 +58,8 @@ export const requestDeleteCourse = createAction(
 )
 
 export const requestDeleteCourseSuccess = createAction(
-  CoursesConstants.REQUEST_DELETE_COURSE_SUCCESS
+  CoursesConstants.REQUEST_DELETE_COURSE_SUCCESS,
+  props<{ id: string }>()
 )
 
 export const requestDeleteCourseFail = createAction(
@@ -75,7 +76,7 @@ export const requestEditCourse = createAction(
 
 export const requestEditCourseSuccess = createAction(
   CoursesConstants.REQUEST_EDIT_COURSE_SUCCESS,
-  props<{ course: Course }>()
+  props<{ course: Partial<Course> }>()
 )
 
 export const requestEditCourseFail = createAction(
@@ -87,12 +88,12 @@ export const requestEditCourseFail = createAction(
 
 export const requestCreateCourse = createAction(
   CoursesConstants.REQUEST_CREATE_COURSE,
-  props<{ course: Course }>()
+  props<{ course: Partial<Course> }>()
 )
 
 export const requestCreateCourseSuccess = createAction(
   CoursesConstants.REQUEST_CREATE_COURSE_SUCCESS,
-  props<{ course: Course }>()
+  props<{ course: Partial<Course> }>()
 )
 
 export const requestCreateCourseFail = createAction(

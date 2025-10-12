@@ -12,15 +12,16 @@ export class CoursesStateFacade {
   isAllCoursesLoading$ = this.store.pipe(select(CoursesSelectors.isAllCoursesLoadingSelector))
   isSingleCourseLoading$ = this.store.pipe(select(CoursesSelectors.isSingleCourseLoadingSelector))
   isSearchingState$ = this.store.pipe(select(CoursesSelectors.isSearchingStateSelector))
-  
-  course$(courseId: string) {
-  return this.store.pipe(
-    select(CoursesSelectors.getCourse(courseId))
-    );
-  }
-
   allCourses$ = this.store.pipe(select(CoursesSelectors.getAllCourses));
   errorMessage$ = this.store.pipe(select(CoursesSelectors.getErrorMessage));
+
+  constructor(private store: Store<CoursesState>) { }
+
+  course$(courseId: string) {
+    return this.store.pipe(
+      select(CoursesSelectors.getCourse(courseId))
+    );
+  }
 
   getCourse(courseId: string) {
     return this.store.pipe(
@@ -28,8 +29,7 @@ export class CoursesStateFacade {
     );
   }
 
-  constructor(private store: Store<CoursesState>) { }
-
+  
   getAllCourses() {
     this.store.dispatch(CoursesActions.requestAllCourses())
   }
@@ -42,13 +42,13 @@ export class CoursesStateFacade {
     this.store.dispatch(CoursesActions.requestFilteredCourses({ title }))
   }
 
-  editCourse( id : string, course: Course ) {
-    this.store.dispatch(CoursesActions.requestEditCourse({ id, course}))
+  editCourse(id: string, course: Course) {
+    this.store.dispatch(CoursesActions.requestEditCourse({ id: course.id, course }))
   }
 
   createCourse(course: Course) {
     this.store.dispatch(CoursesActions.requestCreateCourse({ course }))
-  } 
+  }
 
   deleteCourse(id: string) {
     this.store.dispatch(CoursesActions.requestDeleteCourse({ id }))

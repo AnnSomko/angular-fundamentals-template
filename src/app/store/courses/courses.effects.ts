@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import { CoursesState } from './courses.reducer';
 import { getAllCourses } from './courses.selectors';
 import { Router } from '@angular/router';
+import { Course } from '@app/models/course.model';
 
 @Injectable()
 export class CoursesEffects {
@@ -71,7 +72,7 @@ export class CoursesEffects {
 
   createCourse$ = createEffect(() => this.actions$.pipe(
     ofType(CoursesActions.requestCreateCourse),
-    mergeMap(({ course }) => this.coursesService.createCourse(course)
+    mergeMap(({ course }) => this.coursesService.createCourse(course as Course)
       .pipe(
         map((response) => CoursesActions.requestCreateCourseSuccess({ course: response.result })),
         catchError(error => of(CoursesActions.requestCreateCourseFail({ error })))
