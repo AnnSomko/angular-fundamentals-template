@@ -16,12 +16,12 @@ export class CoursesService {
         return this.http.get<CoursesResponse>(`${this.BASE_URL}/courses/all`);
     }
 
-    createCourse(course: Course): Observable<CoursesResponse> {
-        return this.http.post<CoursesResponse>(`${this.BASE_URL}/courses/add`, course);
+    createCourse(course: Course): Observable<CourseResponse> {
+        return this.http.post<CourseResponse>(`${this.BASE_URL}/courses/add`, course);
     }
 
-    editCourse(id: string, course: Course): Observable<CoursesResponse> {
-        return this.http.put<CoursesResponse>(`${this.BASE_URL}/courses/${id}`, course);
+    editCourse(id: string, course: Course): Observable<CourseResponse> {
+        return this.http.put<CourseResponse>(`${this.BASE_URL}/courses/${id}`, course);
     }
 
     getCourse(id: string): Observable<CourseResponse> {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, finalize, map, Observable, tap } from 'rxjs';
 import { CoursesService } from './courses.service';
-import { Course } from '@app/models/course.model';
+import { Course, CourseResponse, CoursesResponse } from '@app/models/course.model';
 import { Author } from '@app/models/author.model';
 
 @Injectable({
@@ -20,43 +20,37 @@ export class CoursesStoreService {
 
   constructor(private coursesService: CoursesService) { }
 
-  getAll() {
+  getAll(): Observable<CoursesResponse> {
     this.loading$$.next(true);
-    this.coursesService
-      .getAll()
-      .pipe(finalize(() => this.loading$$.next(false)))
-      .subscribe({
-        next: (response) => this.courses$$.next(response.result),
-        error: () => this.courses$$.next([]),
-      });
+    return this.coursesService.getAll().pipe(
+      finalize(() => this.loading$$.next(false))
+    );
   }
 
   getCourse(id: string): Observable<Course> {
     return this.coursesService.getCourse(id).pipe(map(response => response.result));
   }
 
-  createCourse(course: Course): void {
+  createCourse(course: Course): Observable<CourseResponse> {
     this.loading$$.next(true);
-    this.coursesService
-      .createCourse(course)
-      .pipe(finalize(() => this.loading$$.next(false)))
-      .subscribe(() => this.getAll());
+    return this.coursesService.createCourse(course).pipe(
+      finalize(() => this.loading$$.next(false))
+    );
   }
 
-  editCourse(id: string, course: Course): void {
+  editCourse(id: string, course: Course): Observable<Course> {
     this.loading$$.next(true);
-    this.coursesService
-      .editCourse(id, course)
-      ?.pipe(finalize(() => this.loading$$.next(false)))
-      .subscribe(() => this.getAll());
+    return this.coursesService.editCourse(id, course).pipe(
+      map(response => response.result),
+      finalize(() => this.loading$$.next(false))
+    );
   }
 
-  deleteCourse(id: string): void {
+  deleteCourse(id: string): Observable<void> {
     this.loading$$.next(true);
-    this.coursesService
-      .deleteCourse(id)
-      ?.pipe(finalize(() => this.loading$$.next(false)))
-      .subscribe(() => this.getAll());
+    return this.coursesService.deleteCourse(id)
+      ?.pipe(finalize(() => this.loading$$.next(false))
+      )
   }
 
   filterCourses(value: string): void {

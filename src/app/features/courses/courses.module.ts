@@ -7,7 +7,6 @@ import { CourseInfoModule } from "../course-info/course-info.module";
 import { CourseListModule } from './course-list/course-list.module';
 import { CoursesRoutingModule } from './courses-routing.module';
 
-
 @NgModule({
   declarations: [CoursesComponent],
   imports: [
@@ -17,7 +16,7 @@ import { CoursesRoutingModule } from './courses-routing.module';
     ReactiveFormsModule,
     CoursesRoutingModule,
     CourseInfoModule,
-    CourseListModule
+    CourseListModule,
 ]
 })
 export class CourseModule {}
