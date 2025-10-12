@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Author } from '@app/models/author.model';
 import { Course } from '@app/models/course.model';
 import { CoursesStoreService } from '@app/services/courses-store.service';
+import { CoursesStateFacade } from '@app/store/courses/courses.facade';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 
@@ -26,6 +27,7 @@ export class CourseFormComponent {
     private router: Router,
     private route: ActivatedRoute,
     private coursesStore: CoursesStoreService,
+    private coursesFacade: CoursesStateFacade
   ) {
     library.addIconPacks(fas);
   }
@@ -47,9 +49,11 @@ export class CourseFormComponent {
 
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.coursesStore.getCourse(id).subscribe(course => {
+      this.coursesFacade.getCourse(id).subscribe(course => {
         this.course = course;
-        this.patchForm(course);
+        if (course) {
+          this.patchForm(course);
+        }
       });
     }
 
@@ -132,9 +136,9 @@ export class CourseFormComponent {
 
     if (this.courseForm.valid) {
       if (this.course) {
-        this.coursesStore.editCourse(this.course.id, this.courseForm.value);
+        this.coursesFacade.editCourse(this.course.id, this.courseForm.value);
       } else {
-        this.coursesStore.createCourse(this.courseForm.value)
+        this.coursesFacade.createCourse(this.courseForm.value)
       }
       this.router.navigate(["/courses"]);
     } else {

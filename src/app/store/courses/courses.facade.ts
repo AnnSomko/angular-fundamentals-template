@@ -16,8 +16,8 @@ export class CoursesStateFacade {
   course$(courseId: string) {
   return this.store.pipe(
     select(CoursesSelectors.getCourse(courseId))
-  );
-}
+    );
+  }
 
   allCourses$ = this.store.pipe(select(CoursesSelectors.getAllCourses));
   errorMessage$ = this.store.pipe(select(CoursesSelectors.getErrorMessage));

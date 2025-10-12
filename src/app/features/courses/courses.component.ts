@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Course } from '@app/models/course.model';
 import { CoursesStoreService } from '@app/services/courses-store.service';
+import { CoursesStateFacade } from '@app/store/courses/courses.facade';
 import { UserStoreService } from '@app/user/services/user-store.service';
 
 @Component({
@@ -10,7 +11,7 @@ import { UserStoreService } from '@app/user/services/user-store.service';
   styleUrls: ['./courses.component.scss']
 })
 export class CoursesComponent implements OnInit {
-  courses$ = this.coursesStore.courses$;
+  courses$ = this.coursesFacade.allCourses$;
   authors$ = this.coursesStore.authors$;
   isLoading$ = this.coursesStore.loading$;
   isAdmin$ = this.userStore.isAdmin$;
@@ -18,23 +19,23 @@ export class CoursesComponent implements OnInit {
   constructor(
     private router: Router,
     private coursesStore: CoursesStoreService,
-    private userStore: UserStoreService
+    private userStore: UserStoreService,
+    private coursesFacade: CoursesStateFacade
   ) {
-    this.courses$ = this.coursesStore.courses$;
     this.isAdmin$ = this.userStore.isAdmin$;
   }
 
   ngOnInit(): void {
-    this.coursesStore.getAll();
+    this.coursesFacade.getAllCourses();
     this.coursesStore.getAllAuthors();
   }
 
   onSearch(query: string) {
     const value = query.trim();
     if (value) {
-      this.coursesStore.filterCourses(value);
+      this.coursesFacade.getFilteredCourses(value);
     } else {
-      this.coursesStore.getAll();
+      this.coursesFacade.getAllCourses();
     }
   }
 

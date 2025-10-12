@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Course } from '@app/models/course.model';
-import { CoursesStoreService } from '@app/services/courses-store.service';
+import { CoursesStateFacade } from '@app/store/courses/courses.facade';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-course-info',
@@ -9,24 +10,24 @@ import { CoursesStoreService } from '@app/services/courses-store.service';
   styleUrls: ['./course-info.component.scss']
 })
 export class CourseInfoComponent implements OnInit {
-  @Input() course!: Course;
+  course$!: Observable<Course | undefined>;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private coursesService: CoursesStoreService
+    private coursesFacade: CoursesStateFacade
   ) { }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-        this.coursesService.getCourse(id).subscribe((course) => {
-        this.course = course;
-      });
-    }
-  }
-  
-    onBack(): void {
+      this.coursesFacade.getSingleCourse(id);
+      this.course$ = this.coursesFacade.course$(id);
+    };
+  };
+
+
+  onBack(): void {
     this.router.navigate(["/courses"]);
   }
 }

@@ -27,15 +27,4 @@ export class CourseCardComponent {
   onDelete() {
     this.deleteCourse.emit(this.course.id);
   }
-
-  get authorNames(): string {
-    if (!this.course?.authors?.length) return 'Authors';
-
-    return this.course.authors
-      .map(authorId => {
-        const author = this.authors.find(a => a.id === authorId);
-        return author ? author.name : 'Unknown';
-      })
-      .join(', ');
-  }
 }

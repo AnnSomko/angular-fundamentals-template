@@ -26,7 +26,6 @@ import { EffectsModule } from '@ngrx/effects';
     CourseModule,
     HttpClientModule,
     AppRoutingModule,
-    StoreModule.forRoot({}, {}),
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot(effects)
   ],

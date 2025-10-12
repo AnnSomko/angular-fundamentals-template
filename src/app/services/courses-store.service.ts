@@ -21,10 +21,7 @@ export class CoursesStoreService {
   constructor(private coursesService: CoursesService) { }
 
   getAll(): Observable<CoursesResponse> {
-    this.loading$$.next(true);
-    return this.coursesService.getAll().pipe(
-      finalize(() => this.loading$$.next(false))
-    );
+    return this.coursesService.getAll()
   }
 
   getCourse(id: string): Observable<Course> {
@@ -32,46 +29,17 @@ export class CoursesStoreService {
   }
 
   createCourse(course: Course): Observable<CourseResponse> {
-    this.loading$$.next(true);
-    return this.coursesService.createCourse(course).pipe(
-      finalize(() => this.loading$$.next(false))
-    );
+    return this.coursesService.createCourse(course)
   }
 
   editCourse(id: string, course: Course): Observable<Course> {
-    this.loading$$.next(true);
     return this.coursesService.editCourse(id, course).pipe(
-      map(response => response.result),
-      finalize(() => this.loading$$.next(false))
+      map(response => response.result)
     );
   }
 
   deleteCourse(id: string): Observable<void> {
-    this.loading$$.next(true);
-    return this.coursesService.deleteCourse(id)
-      ?.pipe(finalize(() => this.loading$$.next(false))
-      )
-  }
-
-  filterCourses(value: string): void {
-    if (value.trim() === "") {
-      this.getAll();
-      return;
-    }
-    this.loading$$.next(true);
-    this.coursesService
-      .getAll()
-      .pipe(finalize(() => this.loading$$.next(false)))
-      .subscribe({
-        next: (response) => {
-          const search = value.trim().toLowerCase();
-          const filtered = response.result.filter((course) =>
-            course.title.toLowerCase().includes(search)
-          );
-          this.courses$$.next(filtered);
-        },
-        error: () => this.courses$$.next([]),
-      });
+    return this.coursesService.deleteCourse(id);
   }
 
   getAllAuthors(): void {
