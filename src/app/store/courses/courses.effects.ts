@@ -52,14 +52,17 @@ export class CoursesEffects {
       ))
   ))
 
-  deleteCourse$ = createEffect(() => this.actions$.pipe(
-    ofType(CoursesActions.requestDeleteCourse),
-    mergeMap(({ id }) => this.coursesService.deleteCourse(id)
-      .pipe(
-        map(() => (CoursesActions.requestAllCourses)),
-        catchError(error => of(CoursesActions.requestDeleteCourseFail({ error })))
-      ))
-  ))
+  deleteCourse$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CoursesActions.requestDeleteCourse),
+      mergeMap(({ id }) =>
+        this.coursesService.deleteCourse(id).pipe(
+          map(() => CoursesActions.requestAllCourses()),
+          catchError(error => of(CoursesActions.requestDeleteCourseFail({ error })))
+        )
+      )
+    )
+  )
 
   editCourse$ = createEffect(() => this.actions$.pipe(
     ofType(CoursesActions.requestEditCourse),

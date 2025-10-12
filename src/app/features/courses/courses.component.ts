@@ -43,16 +43,12 @@ export class CoursesComponent implements OnInit {
     this.router.navigate(["/courses", course.id]);
   }
 
-  showList() {
-    this.router.navigate(["/courses"]);
-  }
-
   onEdit(courseId: string) {
     this.router.navigate([`/courses/edit/${courseId}`]);
   }
 
   onDelete(courseId: string) {
-    this.coursesStore.deleteCourse(courseId);
+    this.coursesFacade.deleteCourse(courseId);
   }
 
   onAddCourse() {
