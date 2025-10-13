@@ -9,6 +9,6 @@ export class AuthorizedGuard implements CanMatch {
   constructor(private auth: AuthService, private router: Router) {}
 
   canMatch(route: Route, segments: UrlSegment[]): boolean | UrlTree {
-    return this.auth.isAuthorized$ ? true : this.router.parseUrl('/login');
+    return this.auth.isAuthorized ? true : this.router.parseUrl('/login');
   }
 }

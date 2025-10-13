@@ -9,7 +9,7 @@ import { LoginPayload, RegisterPayload, User } from '@app/models/user.model';
 })
 export class AuthService {
   private readonly API_URL = "http://localhost:4000";
-    private isAuthorized$$ = new BehaviorSubject<boolean>(
+  private isAuthorized$$ = new BehaviorSubject<boolean>(
     !!this.sessionStorage.getToken()
   );
   public isAuthorized$: Observable<boolean> =
