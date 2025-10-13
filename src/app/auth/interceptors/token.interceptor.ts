@@ -1,7 +1,50 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor } from '@angular/common/http';
+import {
+  HttpInterceptor,
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpErrorResponse
+} from '@angular/common/http';
+import { Observable, catchError, throwError } from 'rxjs';
+import { AuthService } from '../services/auth.service';
+import { SessionStorageService } from '../services/session-storage.service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-    // Add your code here
+  constructor(
+    private authService: AuthService, 
+    private router: Router,
+    private sessionStorageService: SessionStorageService
+  ) {}
+
+  intercept(
+    request: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    const token = this.authService.getToken();
+
+    if (token) {
+      console.log('Adding token to request:', token, 'URL:', request.url);
+      request = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } else {
+      console.log('No token found for request:', request.url);
+    }
+
+    return next.handle(request).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          this.authService.logout();
+          this.sessionStorageService.deleteToken();
+          this.router.navigate(["/login"]);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
 }

@@ -1,0 +1,41 @@
+.app-plate {
+  width: 100%;
+  min-height: 477px;
+  background-color: #fff;
+  border: 1px solid #CFCFCF;
+  border-radius: 4px;
+  padding: 32px;
+  display: flex;
+  justify-content: center;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.app-error-text {
+  color: #FF0000;
+  position: absolute;
+  margin-top: 4px;
+}
+
+.form__control {
+  margin-bottom: 24px;
+}
+.form__action {
+  margin-top: 54px;
+}
+.form__text {
+  text-align: center;
+  margin-top: 38px;
+  flex-wrap: wrap;
+}
+
+.separator {
+  width: 100%;
+  border-bottom: 1px solid #CFCFCF;
+}
+
+.text-danger {
+  color: red;
+}/*# sourceMappingURL=styles.css.map */

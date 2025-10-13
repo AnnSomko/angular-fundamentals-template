@@ -1,0 +1,21 @@
+<div class="course-list">
+  <div *ngIf="!courses || courses.length === 0" class="courses-list__empty">
+    <app-info [title]="'Your list is empty'" [text]="'Please add new courses.'">
+      <app-button
+        [buttonText]="'Add new course'"
+        (click)="addCourse.emit()">
+       ></app-button>
+    </app-info>
+  </div>
+
+  <app-course-card
+    *ngFor="let course of courses"
+    [course]="course"
+    [authors]="authors"
+    [editable]="editable"
+    (showCourse)="onShow($event)"
+    (editCourse)="onEdit($event)"
+    (deleteCourse)="onDelete($event)"
+  >
+  </app-course-card>
+</div>

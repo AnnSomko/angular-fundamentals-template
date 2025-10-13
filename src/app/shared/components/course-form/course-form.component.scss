@@ -1,15 +1,22 @@
 @import 'src/app/shared/styles/styles';
 
 .course {
- min-width: 60vw;
+  min-width: 60vw;
 
   &__flex {
     display: flex;
-    justify-content: space-between;
     align-items: baseline;
 
     & input {
       flex: 1;
+    }
+
+    &-input {
+      max-width: 50%;
+
+      &:focus {
+        outline: none;
+      }
     }
 
     & app-button {
@@ -24,6 +31,7 @@
   &__authors {
     margin-top: 8px;
     display: flex;
+    flex-direction: column;
 
     &-item {
       margin-right: 10px;
@@ -34,4 +42,37 @@
     margin-left: 4px;
     cursor: pointer;
   }
+
+  &__container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.form__btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.icon-btn {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.authors-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.invalid-input {
+  border: 1px solid red;
+  outline: none;
 }

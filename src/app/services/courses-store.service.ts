@@ -1,42 +1,75 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, finalize, map, Observable, tap } from 'rxjs';
+import { CoursesService } from './courses.service';
+import { Course, CourseResponse, CoursesResponse } from '@app/models/course.model';
+import { Author } from '@app/models/author.model';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
+
 export class CoursesStoreService {
-    getAll(){
-        // Add your code here
-    }
+  private courses$$ = new BehaviorSubject<Course[]>([]);
+  public courses$ = this.courses$$.asObservable();
 
-    createCourse(course: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  private authors$$ = new BehaviorSubject<Author[]>([]);
+  public authors$ = this.authors$$.asObservable();
 
-    getCourse(id: string) {
-        // Add your code here
-    }
+  private loading$$ = new BehaviorSubject<boolean>(false);
+  public loading$ = this.loading$$.asObservable();
 
-    editCourse(id: string, course: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  constructor(private coursesService: CoursesService) { }
 
-    deleteCourse(id: string) {
-        // Add your code here
-    }
+  getAll(): Observable<CoursesResponse> {
+    return this.coursesService.getAll()
+  }
 
-    filterCourses(value: string) {
-        // Add your code here
-    }
+  getCourse(id: string): Observable<Course> {
+    return this.coursesService.getCourse(id).pipe(map(response => response.result));
+  }
 
-    getAllAuthors() {
-        // Add your code here
-    }
+  createCourse(course: Course): Observable<CourseResponse> {
+    return this.coursesService.createCourse(course)
+  }
 
-    createAuthor(name: string) {
-        // Add your code here
-    }
+  editCourse(id: string, course: Course): Observable<Course> {
+    return this.coursesService.editCourse(id, course).pipe(
+      map(response => response.result as Course)
+    );
+  }
 
-    getAuthorById(id: string) {
-        // Add your code here
-    }
+  deleteCourse(id: string): Observable<void> {
+    return this.coursesService.deleteCourse(id);
+  }
+
+  getAllAuthors(): void {
+    this.loading$$.next(true);
+    this.coursesService
+      .getAllAuthors()
+      .pipe(
+        finalize(() => this.loading$$.next(false))
+      )
+      .subscribe({
+        next: (authors) => this.authors$$.next(authors),
+        error: () => this.authors$$.next([]),
+      });
+  }
+
+  createAuthor(name: string): void {
+    this.loading$$.next(true);
+    this.coursesService.createAuthor(name)
+      .pipe(
+        tap(newAuthor => {
+          this.authors$$.next([...this.authors$$.value, newAuthor]);
+        })
+      )
+      .subscribe();
+  }
+
+  getAuthorById(id: string): Observable<Author> {
+    this.loading$$.next(true);
+    return this.coursesService.getAuthorById(id).pipe(
+      finalize(() => this.loading$$.next(false))
+    );
+  }
 }

@@ -7,3 +7,9 @@
   flex-direction: column;
   justify-content: space-between;
 }
+
+  input.ng-invalid.ng-touched,
+  input.ng-invalid.ng-dirty,
+  form.ng-submitted input.ng-invalid {
+    border-color: $color-red;
+  }

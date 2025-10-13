@@ -1,4 +1,12 @@
 <div class="app-header">
   <img alt="logo" src="assets/logo.svg">
-  <!-- Enter your code here -->
+  <span *ngIf="name$ | async as name" class="username">{{ name }}</span>
+
+  <app-button
+    [buttonText]="(isAuthorized$ | async) ? 'Logout' : 'Login'"
+    iconName="logout"
+    type="button"
+    (click)="onAuthButtonClick()">
+  </app-button>
+  
 </div>

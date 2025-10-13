@@ -1,30 +1,69 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { SessionStorageService } from './session-storage.service';
+import { LoginPayload, RegisterPayload, User } from '@app/models/user.model';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class AuthService {
-    login(user: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  private readonly API_URL = "http://localhost:4000";
+  private isAuthorized$$ = new BehaviorSubject<boolean>(
+    !!this.sessionStorage.getToken()
+  );
+  public isAuthorized$: Observable<boolean> =
+    this.isAuthorized$$.asObservable();
 
-    logout() {
-        // Add your code here
-    }
+  constructor(
+    private http: HttpClient,
+    private sessionStorage: SessionStorageService
+  ) {}
 
-    register(user: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  public getToken(): string | null {
+    return this.sessionStorage.getToken();
+  }
 
-    get isAuthorised() {
-        // Add your code here. Get isAuthorized$$ value
-    }
+  login(user: LoginPayload): Observable<any> {
+    return this.http.post<any>(`${this.API_URL}/login`, user).pipe(
+      tap((response) => {
+        console.log('Login response:', response);
+        if (response.result) {
+          const token = response.result.replace(/^Bearer\s+/i, '');
+          this.sessionStorage.setToken(token);
+          console.log('Token saved in sessionStorage:', this.sessionStorage.getToken());
+          this.isAuthorized$$.next(true);
+          console.log('Token now saved:', response.token);
+        }
+      })
+    );
+  }
 
-    set isAuthorised(value: boolean) {
-        // Add your code here. Change isAuthorized$$ value
-    }
+  logout(): void {
+    this.sessionStorage.deleteToken();
+    this.isAuthorized = false;
+  }
 
-    getLoginUrl() {
-        // Add your code here
-    }
+  register(user: RegisterPayload): Observable<{ token: string }> {
+    return this.http.post<{ token: string }>(`${this.API_URL}/register`, user).pipe(
+      tap((response) => {
+        if (response.token) {
+          this.sessionStorage.setToken(response.token);
+          this.isAuthorized = true;
+        }
+      })
+    );
+  }
+
+  get isAuthorized(): boolean {
+    return this.isAuthorized$$.value;
+  }
+
+  set isAuthorized(value: boolean) {
+    this.isAuthorized$$.next(value);
+  }
+
+  getLoginUrl(): string {
+     return `${this.API_URL}/login`;
+  }
 }
