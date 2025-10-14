@@ -65,19 +65,21 @@ export class CoursesStoreService {
       return;
     }
     this.loading$$.next(true);
-    this.coursesService
-      .getAll()
-      .pipe(finalize(() => this.loading$$.next(false)))
-      .subscribe({
-        next: (response) => {
-          const search = value.trim().toLowerCase();
-          const filtered = response.result.filter((course) =>
-            course.title.toLowerCase().includes(search)
-          );
-          this.courses$$.next(filtered);
-        },
-        error: () => this.courses$$.next([]),
-      });
+    this.coursesService.filterCourses(value)
+    .pipe()
+    // this.coursesService
+    //   .getAll()
+    //   .pipe(finalize(() => this.loading$$.next(false)))
+    //   .subscribe({
+    //     next: (response) => {
+    //       const search = value.trim().toLowerCase();
+    //       const filtered = response.result.filter((course) =>
+    //         course.title.toLowerCase().includes(search)
+    //       );
+    //       this.courses$$.next(filtered);
+    //     },
+    //     error: () => this.courses$$.next([]),
+    //   });
   }
 
   getAllAuthors(): void {

@@ -8,7 +8,7 @@ import { inject, Injectable } from '@angular/core';
 export class NotAuthorizedGuard implements CanActivate {
   constructor(private auth: AuthService, private router: Router) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
+  canActivate(): boolean | UrlTree {
     return !this.auth.isAuthorized ? true : this.router.createUrlTree(['/courses']);
   }
 }
