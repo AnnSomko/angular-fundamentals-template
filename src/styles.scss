@@ -8,11 +8,13 @@ html {
 }
 
 body {
+  box-sizing: border-box;
   margin: 0;
   font-family: "Open Sans", sans-serif;
   background-color: #F7F7F7;
   color: #333E48;
   height: 100%;
+  overflow-x: hidden;
 }
 
 input,
@@ -41,4 +43,9 @@ label {
 
 h2 {
   margin-bottom: 36px;
+}
+
+a {
+  text-decoration: none;
+  color: #333E48;
 }

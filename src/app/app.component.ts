@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UserStoreService } from './user/services/user-store.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'courses-app';
+  constructor(
+    private userStore: UserStoreService
+  ) {}
+
+  ngOnInit() {
+    this.userStore.getUser()
+  }
 }

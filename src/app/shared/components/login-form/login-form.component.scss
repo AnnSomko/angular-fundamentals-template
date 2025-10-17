@@ -7,3 +7,25 @@
   flex-direction: column;
   justify-content: space-between;
 }
+
+.form__control {
+  margin-bottom: 16px;
+
+  input.ng-invalid.ng-touched,
+  input.ng-invalid.ng-dirty,
+  form.ng-submitted input.ng-invalid {
+    border-color: $color-red;
+  }
+
+  span.text-danger {
+    display: block;
+    margin-top: 4px;
+    font-size: 14px;
+    color: $color-red;
+    min-height: 18px;
+  }
+}
+
+input, textarea {
+  border: 1px solid $color-gray;;
+}

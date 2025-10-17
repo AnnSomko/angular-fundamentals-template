@@ -1,42 +1,50 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
+import { Course, CourseResponse, CoursesResponse } from '@app/models/course.model';
+import { Author } from '@app/models/author.model';
 
 @Injectable({
     providedIn: 'root'
 })
+
 export class CoursesService {
-    getAll() {
-        // Add your code here
+    private readonly BASE_URL = 'http://localhost:4000';
+    constructor(private http: HttpClient) { }
+
+    getAll(): Observable<CoursesResponse> {
+        return this.http.get<CoursesResponse>(`${this.BASE_URL}/courses/all`);
     }
 
-    createCourse(course: any) { // replace 'any' with the required interface
-        // Add your code here
+    createCourse(course: Course): Observable<CoursesResponse> {
+        return this.http.post<CoursesResponse>(`${this.BASE_URL}/courses/add`, course);
     }
 
-    editCourse(id: string, course: any) { // replace 'any' with the required interface
-        // Add your code here
+    editCourse(id: string, course: Course): Observable<CoursesResponse> {
+        return this.http.put<CoursesResponse>(`${this.BASE_URL}/courses/${id}`, course);
     }
 
-    getCourse(id: string) {
-        // Add your code here
+    getCourse(id: string): Observable<CourseResponse> {
+        return this.http.get<CourseResponse>(`${this.BASE_URL}/courses/${id}`);
     }
 
-    deleteCourse(id: string) {
-        // Add your code here
+    deleteCourse(id: string): Observable<void> {
+        return this.http.delete<void>(`${this.BASE_URL}/courses/${id}`);
     }
 
-    filterCourses(value: string) {
-        // Add your code here
+    filterCourses(value: string): Observable<Course[]> {
+        return this.http.get<Course[]>(`${this.BASE_URL}/courses/filter?value=${value}`);
     }
 
-    getAllAuthors() {
-        // Add your code here
+    getAllAuthors(): Observable<Author[]> {
+        return this.http.get<Author[]>(`${this.BASE_URL}/authors/all`);
     }
 
-    createAuthor(name: string) {
-        // Add your code here
+    createAuthor(name: string): Observable<Author> {
+        return this.http.post<Author>(`${this.BASE_URL}/authors/add`, { name });
     }
 
-    getAuthorById(id: string) {
-        // Add your code here
+    getAuthorById(id: string): Observable<Author> {
+        return this.http.get<Author>(`${this.BASE_URL}/authors/${id}`);
     }
 }
