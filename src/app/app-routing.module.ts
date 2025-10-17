@@ -5,8 +5,6 @@ import { LoginFormComponent, RegistrationFormComponent } from './shared/componen
 import { AuthorizedGuard } from './auth/guards/authorized.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/courses', pathMatch: 'full' },
-  { path: '**', redirectTo: 'courses' },
   {
     path: 'login',
     component: LoginFormComponent,
@@ -20,9 +18,11 @@ export const routes: Routes = [
   {
     path: 'courses',
     loadChildren: () =>
-      import('./features/courses/courses.module').then(m => m.CourseModule),
+    import('./features/courses/courses.module').then(m => m.CourseModule),
     canLoad: [AuthorizedGuard]
-  }
+  },
+  { path: '', redirectTo: '/courses', pathMatch: 'full' },
+  { path: '**', redirectTo: '/courses' },
 ];
 
 @NgModule({

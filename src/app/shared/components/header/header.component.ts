@@ -23,6 +23,7 @@ export class HeaderComponent {
   }
 
   onAuthButtonClick() {
+    console.log("Button Clicked!")
     if (this.authService.isAuthorized) {
       this.authService.logout();
       this.router.navigate(['/login']);

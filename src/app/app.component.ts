@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from './auth/services/auth.service';
+import { UserStoreService } from './user/services/user-store.service';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +8,11 @@ import { AuthService } from './auth/services/auth.service';
 })
 export class AppComponent {
   title = 'courses-app';
-  constructor() {}
+  constructor(
+    private userStore: UserStoreService
+  ) {}
+
+  ngOnInit() {
+    this.userStore.getUser()
+  }
 }

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap, of } from 'rxjs';
 import { SessionStorageService } from './session-storage.service';
 import { LoginPayload, RegisterPayload, User } from '@app/models/user.model';
+import { UserStoreService } from '@app/user/services/user-store.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +18,9 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private sessionStorage: SessionStorageService
-  ) {}
+    private sessionStorage: SessionStorageService,
+    private userStore: UserStoreService
+  ) { }
 
   public getToken(): string | null {
     return this.sessionStorage.getToken();
@@ -42,6 +44,7 @@ export class AuthService {
   logout(): void {
     this.sessionStorage.deleteToken();
     this.isAuthorized = false;
+    this.userStore.clearUser();
   }
 
   register(user: RegisterPayload): Observable<{ token: string }> {
@@ -64,6 +67,6 @@ export class AuthService {
   }
 
   getLoginUrl(): string {
-     return `${this.API_URL}/login`;
+    return `${this.API_URL}/login`;
   }
 }

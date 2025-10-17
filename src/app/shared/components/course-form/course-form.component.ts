@@ -10,6 +10,7 @@ import { Course } from '@app/models/course.model';
 import { CoursesStoreService } from '@app/services/courses-store.service';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-course-form',
@@ -63,11 +64,12 @@ export class CourseFormComponent {
       duration: course.duration,
     });
 
-  this.coursesStore.authors$.subscribe(authors => {
+    this.coursesStore.authors$.pipe(take(1)).subscribe(authors => {
+    this.authors.clear();
     course.authors.forEach(authorId => {
       const authorObj = authors.find(a => a.id === authorId);
       if (authorObj) {
-        this.courseAuthors.push(this.fb.control(authorObj));
+        this.courseAuthors.push(this.fb.control(authorObj.name));
       }
     });
   });
@@ -86,7 +88,7 @@ export class CourseFormComponent {
   }
 
   createAuthor(): void {
-    const nameControl = this.courseForm.get('newAuthor.name') as FormControl<string>;;
+    const nameControl = this.courseForm.get('newAuthor.name') as FormControl<string>;
 
     if (nameControl?.invalid) {
       nameControl.markAsTouched();
@@ -133,6 +135,7 @@ export class CourseFormComponent {
     if (this.courseForm.valid) {
       if (this.course) {
         this.coursesStore.editCourse(this.course.id, this.courseForm.value);
+        this.coursesStore.createAuthor(this.courseAuthors.value)
       } else {
         this.coursesStore.createCourse(this.courseForm.value)
       }

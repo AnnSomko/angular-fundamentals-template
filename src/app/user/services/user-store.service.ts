@@ -26,7 +26,7 @@ export class UserStoreService {
           this.isAdmin$$.next(isAdmin);
           console.log("isAdmin:", isAdmin);
         },
-         error: (err) => {
+        error: (err) => {
           console.log("getUser error:", err);
           this.name$$.next("");
           this.isAdmin$$.next(false);
@@ -41,5 +41,10 @@ export class UserStoreService {
 
   set isAdmin(value: boolean) {
     this.isAdmin$$.next(value);
+  }
+
+  clearUser() {
+    this.name$$.next(null);
+    this.isAdmin$$.next(false);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Author } from '@app/models/author.model';
 import { Course } from '@app/models/course.model';
 
@@ -26,16 +26,5 @@ export class CourseCardComponent {
 
   onDelete() {
     this.deleteCourse.emit(this.course.id);
-  }
-
-  get authorNames(): string {
-    if (!this.course?.authors?.length) return 'Authors';
-
-    return this.course.authors
-      .map(authorId => {
-        const author = this.authors.find(a => a.id === authorId);
-        return author ? author.name : 'Unknown';
-      })
-      .join(', ');
   }
 }
